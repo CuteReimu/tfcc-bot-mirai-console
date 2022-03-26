@@ -6,6 +6,8 @@ import net.mamoe.mirai.event.events.GroupMessageEvent
 import top.enkansakura.TouhouFreshmanCampRobot
 import top.enkansakura.bilibili.data.BiliPluginConfig
 
+var whiteList = mutableListOf<Long>(TouhouFreshmanCampRobot.superAdmin) + TouhouFreshmanCampRobot.adminList + TouhouFreshmanCampRobot.whiteList
+
 object LiveCommand : CompositeCommand(
     owner = TouhouFreshmanCampRobot,
     "直播", "live",
@@ -14,19 +16,25 @@ object LiveCommand : CompositeCommand(
 
     @SubCommand("开始", "start")
     suspend fun CommandSenderOnMessage<GroupMessageEvent>.start() {
-        subject?.sendMessage(
-            if (fromEvent.sender.id in TouhouFreshmanCampRobot.whiteList) {
+
+        if (fromEvent.sender.id in whiteList) {
+            subject?.sendMessage(
                 TouhouFreshmanCampRobot.live.startLive()
-            } else {
+            )
+            fromEvent.sender.sendMessage(
+                TouhouFreshmanCampRobot.live.getRtmpMsg()
+            )
+        } else {
+            subject?.sendMessage(
                 "你不在白名单中"
-            }
-        )
+            )
+        }
     }
 
-    @SubCommand("关闭", "stop")
+    @SubCommand("停止", "stop")
     suspend fun CommandSenderOnMessage<GroupMessageEvent>.stop() {
         subject?.sendMessage(
-            if (fromEvent.sender.id in TouhouFreshmanCampRobot.whiteList) {
+            if (fromEvent.sender.id in whiteList) {
                 TouhouFreshmanCampRobot.live.stopLive()
             } else {
                 "你不在白名单中"
@@ -44,7 +52,7 @@ object LiveCommand : CompositeCommand(
     @SubCommand("修改标题", "title")
     suspend fun CommandSenderOnMessage<GroupMessageEvent>.title(newTitle: String) {
         subject?.sendMessage(
-            if (fromEvent.sender.id in TouhouFreshmanCampRobot.whiteList) {
+            if (fromEvent.sender.id in whiteList) {
                 TouhouFreshmanCampRobot.live.updateTitle(newTitle)
             } else {
                 "你不在白名单中"
@@ -53,23 +61,23 @@ object LiveCommand : CompositeCommand(
     }
 
 
-    @SubCommand("测试", "test")
-    suspend fun CommandSenderOnMessage<GroupMessageEvent>.test() {
-        if (subject?.id != 490442642L) {
-            return
-        }
-        subject?.sendMessage("""
-            ${BiliPluginConfig.adminList}
-
-            ${BiliPluginConfig.whiteList}
-
-            ${BiliPluginConfig.sessData}
-
-            ${BiliPluginConfig.biliJct}
-
-            ${BiliPluginConfig.roomId}
-        """.trimIndent())
-    }
+//    @SubCommand("测试", "test")
+//    suspend fun CommandSenderOnMessage<GroupMessageEvent>.test() {
+//        if (subject?.id != 490442642L) {
+//            return
+//        }
+//        subject?.sendMessage("""
+//            ${BiliPluginConfig.adminList}
+//
+//            ${BiliPluginConfig.whiteList}
+//
+//            ${BiliPluginConfig.sessData}
+//
+//            ${BiliPluginConfig.biliJct}
+//
+//            ${BiliPluginConfig.roomId}
+//        """.trimIndent())
+//    }
 
 }
 

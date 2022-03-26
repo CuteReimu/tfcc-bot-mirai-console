@@ -65,4 +65,8 @@ class Live() {
         }
     }
 
+    fun getRtmpMsg(): String {
+        return "服务器地址：${rtmpAddr}\n\n串流密钥：${rtmpCode}"
+    }
+
 }
