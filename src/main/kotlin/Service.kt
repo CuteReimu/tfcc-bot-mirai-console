@@ -1,4 +1,4 @@
-package top.enkansakura
+package org.tfcc.bot
 
 import kotlinx.coroutines.*
 import kotlinx.serialization.ExperimentalSerializationApi

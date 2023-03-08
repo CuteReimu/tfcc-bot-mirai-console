@@ -1,14 +1,16 @@
-package top.enkansakura.command
+package org.tfcc.bot.command
 
-import net.mamoe.mirai.console.command.*
+import net.mamoe.mirai.console.command.CommandSenderOnMessage
+import net.mamoe.mirai.console.command.CompositeCommand
+import net.mamoe.mirai.console.command.SimpleCommand
 import net.mamoe.mirai.event.events.GroupMessageEvent
-import top.enkansakura.TouhouFreshmanCampRobot
-import top.enkansakura.TouhouFreshmanCampRobot.adminList
-import top.enkansakura.TouhouFreshmanCampRobot.whiteList
-import top.enkansakura.bilibili.data.BiliPluginConfig.superAdmin
+import org.tfcc.bot.TouhouFreshmanCampRobot
+import org.tfcc.bot.TouhouFreshmanCampRobot.adminList
+import org.tfcc.bot.TouhouFreshmanCampRobot.whiteList
+import org.tfcc.bot.bilibili.data.BiliPluginConfig.superAdmin
 
 
-object  QueryCommand : SimpleCommand(
+object QueryCommand : SimpleCommand(
     owner = TouhouFreshmanCampRobot,
     "查询", "query"
 ) {
@@ -41,8 +43,8 @@ object ListCommand : CompositeCommand(
                 "白名单列表：\n" +
                         superAdmin + "\n" +
                         adminList.toString()
-                        .replace(Regex("\\[|]"), "")
-                        .replace(Regex(", *"), "\n") + "\n" +
+                            .replace(Regex("\\[|]"), "")
+                            .replace(Regex(", *"), "\n") + "\n" +
                         whiteList.toString()
                             .replace(Regex("\\[|]"), "")
                             .replace(Regex(", *"), "\n")
@@ -103,6 +105,7 @@ object WhiteListCommand : CompositeCommand(
                         whiteList.remove(t)
                         "已删除白名单：${t}"
                     }
+
                     sender -> "你不能删除你自己"
                     else -> "${t}并不是白名单"
                 }
@@ -152,6 +155,7 @@ object AdminListCommand : CompositeCommand(
                         adminList.remove(t)
                         "已删除管理员：${t}"
                     }
+
                     sender -> "你不能删除你自己"
                     else -> "${t}并不是管理员"
                 }

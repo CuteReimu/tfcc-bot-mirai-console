@@ -1,18 +1,17 @@
-package top.enkansakura.bilibili
+package org.tfcc.bot.bilibili
 
-import top.enkansakura.TouhouFreshmanCampRobot
-import  top.enkansakura.TouhouFreshmanCampRobot.username
-import  top.enkansakura.TouhouFreshmanCampRobot.password
-import  top.enkansakura.TouhouFreshmanCampRobot.mid
-import  top.enkansakura.TouhouFreshmanCampRobot.roomId
-import  top.enkansakura.TouhouFreshmanCampRobot.area
-import  top.enkansakura.TouhouFreshmanCampRobot.sessData
-import  top.enkansakura.TouhouFreshmanCampRobot.biliJct
-import  top.enkansakura.TouhouFreshmanCampRobot.adminList
-import  top.enkansakura.TouhouFreshmanCampRobot.whiteList
-import  top.enkansakura.TouhouFreshmanCampRobot.live
-import top.enkansakura.TouhouFreshmanCampRobot.superAdmin
-import top.enkansakura.bilibili.data.BiliPluginConfig
+import org.tfcc.bot.TouhouFreshmanCampRobot
+import org.tfcc.bot.TouhouFreshmanCampRobot.adminList
+import org.tfcc.bot.TouhouFreshmanCampRobot.area
+import org.tfcc.bot.TouhouFreshmanCampRobot.biliJct
+import org.tfcc.bot.TouhouFreshmanCampRobot.mid
+import org.tfcc.bot.TouhouFreshmanCampRobot.password
+import org.tfcc.bot.TouhouFreshmanCampRobot.roomId
+import org.tfcc.bot.TouhouFreshmanCampRobot.sessData
+import org.tfcc.bot.TouhouFreshmanCampRobot.superAdmin
+import org.tfcc.bot.TouhouFreshmanCampRobot.username
+import org.tfcc.bot.TouhouFreshmanCampRobot.whiteList
+import org.tfcc.bot.bilibili.data.BiliPluginConfig
 
 fun init() {
     username = BiliPluginConfig.username

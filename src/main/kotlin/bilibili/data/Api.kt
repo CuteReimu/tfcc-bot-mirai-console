@@ -1,4 +1,4 @@
-package top.enkansakura.bilibili.data
+package org.tfcc.bot.bilibili.data
 
 // Base
 const val LIVE = "https://live.bilibili.com/"

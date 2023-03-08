@@ -1,4 +1,4 @@
-package top.enkansakura.bilibili.data
+package org.tfcc.bot.bilibili.data
 
 import net.mamoe.mirai.console.data.AutoSavePluginConfig
 import net.mamoe.mirai.console.data.ValueDescription

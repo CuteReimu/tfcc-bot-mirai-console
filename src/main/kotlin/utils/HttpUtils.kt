@@ -1,12 +1,12 @@
-package top.enkansakura.utils
+package org.tfcc.bot.utils
 
 import kotlinx.serialization.json.JsonElement
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import top.enkansakura.TouhouFreshmanCampRobot
-import top.enkansakura.bilibili.data.ResultData
+import org.tfcc.bot.TouhouFreshmanCampRobot
+import org.tfcc.bot.bilibili.data.ResultData
 import java.time.Duration
 
 class HttpUtils {

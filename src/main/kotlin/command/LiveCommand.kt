@@ -1,12 +1,12 @@
-package top.enkansakura.command
+package org.tfcc.bot.command
 
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
 import net.mamoe.mirai.console.command.CompositeCommand
 import net.mamoe.mirai.event.events.GroupMessageEvent
-import top.enkansakura.TouhouFreshmanCampRobot
-import top.enkansakura.bilibili.data.BiliPluginConfig
+import org.tfcc.bot.TouhouFreshmanCampRobot
 
-var whiteList = mutableListOf<Long>(TouhouFreshmanCampRobot.superAdmin) + TouhouFreshmanCampRobot.adminList + TouhouFreshmanCampRobot.whiteList
+var whiteList =
+    mutableListOf<Long>(TouhouFreshmanCampRobot.superAdmin) + TouhouFreshmanCampRobot.adminList + TouhouFreshmanCampRobot.whiteList
 
 object LiveCommand : CompositeCommand(
     owner = TouhouFreshmanCampRobot,

@@ -19,11 +19,11 @@
 
 带括号的`/`前缀是可选的
 
-指令需要权限`top.enkansakura.touhoufreshmancamprobot:command.*`
+指令需要权限`org.tfcc.bot.touhoufreshmancamprobot:command.*`
 
 ## 配置文件：
 
-第一次运行会自动生成配置文件`top.enkansakura.TouhouFreshmanCampRobot/BiliPluginConfig.yml`，如下：
+第一次运行会自动生成配置文件`org.tfcc.bot.TouhouFreshmanCampRobot/BiliPluginConfig.yml`，如下：
 
 ```yaml
 # 超级管理员

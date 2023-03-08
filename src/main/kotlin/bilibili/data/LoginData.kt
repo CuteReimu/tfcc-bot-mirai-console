@@ -1,8 +1,7 @@
-package top.enkansakura.bilibili.data
+package org.tfcc.bot.bilibili.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import okhttp3.Challenge
 
 @Serializable
 data class VerifyData(

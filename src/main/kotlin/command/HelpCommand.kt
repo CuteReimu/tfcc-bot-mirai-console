@@ -1,9 +1,9 @@
-package top.enkansakura.command
+package org.tfcc.bot.command
 
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
 import net.mamoe.mirai.console.command.SimpleCommand
 import net.mamoe.mirai.event.events.GroupMessageEvent
-import top.enkansakura.TouhouFreshmanCampRobot
+import org.tfcc.bot.TouhouFreshmanCampRobot
 
 object HelpCommand : SimpleCommand(
     owner = TouhouFreshmanCampRobot,
@@ -12,7 +12,8 @@ object HelpCommand : SimpleCommand(
 ) {
     @Handler
     suspend fun CommandSenderOnMessage<GroupMessageEvent>.help() {
-        subject?.sendMessage("""
+        subject?.sendMessage(
+            """
             红裙直播BOT使用说明：
             @BOT查看可用功能
             直播间管理：
@@ -30,6 +31,7 @@ object HelpCommand : SimpleCommand(
             管理员管理：
                 增加管理员 /管理员 增加 <QQ号|At>
                 删除管理员 /管理员 删除 <QQ号|At>
-        """.trimIndent())
+        """.trimIndent()
+        )
     }
 }

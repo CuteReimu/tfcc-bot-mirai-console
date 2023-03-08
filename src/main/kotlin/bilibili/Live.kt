@@ -1,9 +1,9 @@
-package top.enkansakura.bilibili
+package org.tfcc.bot.bilibili
 
-import top.enkansakura.TouhouFreshmanCampRobot
-import top.enkansakura.bilibili.data.*
-import top.enkansakura.utils.HttpUtils
-import top.enkansakura.utils.decode
+import org.tfcc.bot.TouhouFreshmanCampRobot
+import org.tfcc.bot.bilibili.data.*
+import org.tfcc.bot.utils.HttpUtils
+import org.tfcc.bot.utils.decode
 
 
 internal val logger by TouhouFreshmanCampRobot::logger

@@ -1,4 +1,4 @@
-package top.enkansakura
+package org.tfcc.bot
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.mamoe.mirai.console.command.CommandManager.INSTANCE.register
@@ -6,22 +6,24 @@ import net.mamoe.mirai.console.command.CommandManager.INSTANCE.unregister
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.utils.info
-import top.enkansakura.bilibili.Live
-import top.enkansakura.bilibili.data.BiliPluginConfig
-import top.enkansakura.bilibili.init
-import top.enkansakura.command.*
+import org.tfcc.bot.bilibili.Live
+import org.tfcc.bot.bilibili.data.BiliPluginConfig
+import org.tfcc.bot.bilibili.init
+import org.tfcc.bot.command.*
 
 
 @ExperimentalSerializationApi
 object TouhouFreshmanCampRobot : KotlinPlugin(
     JvmPluginDescription(
-        id = "top.enkansakura.TouhouFreshmanCampRobot",
+        id = "org.tfcc.bot.TouhouFreshmanCampRobot",
         version = "1.0.2",
     ) {
         author("EnkanSakura")
-        info("""
+        info(
+            """
             红裙BOT
-        """.trimIndent())
+        """.trimIndent()
+        )
     }
 ) {
 
@@ -36,7 +38,7 @@ object TouhouFreshmanCampRobot : KotlinPlugin(
     var adminList: MutableList<Long> = arrayListOf()
     var whiteList: MutableList<Long> = arrayListOf()
 
-    val live: Live by lazy {Live()}
+    val live: Live by lazy { Live() }
 
     override fun onEnable() {
         BiliPluginConfig.reload()

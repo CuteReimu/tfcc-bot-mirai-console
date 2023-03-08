@@ -1,1 +1,3 @@
-rootProject.name = "TouhouFreshmanCampRobot"
+
+rootProject.name = "org.tfcc.bot"
+
