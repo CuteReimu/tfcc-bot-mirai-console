@@ -16,15 +16,15 @@ object TFCCConfig : AutoSavePluginConfig("TFCCConfig") {
         val password: String,
 
         /** B站ID */
-        val mid: String,
+        val mid: Int,
 
         @SerialName("room_id")
         /** B站直播间房间号 */
-        val roomId: String,
+        val roomId: Int,
 
         @SerialName("area_v2")
         /** 直播分区 */
-        val areaV2: String,
+        val areaV2: Int,
     )
 
     @ValueDescription("B站相关配置")
@@ -32,9 +32,9 @@ object TFCCConfig : AutoSavePluginConfig("TFCCConfig") {
         BilibiliConfig(
             username = "13888888888",
             password = "12345678",
-            mid = "12345678",
-            roomId = "12345678",
-            areaV2 = "236", // 236-主机游戏
+            mid = 12345678,
+            roomId = 12345678,
+            areaV2 = 236, // 236-主机游戏
         )
     )
 

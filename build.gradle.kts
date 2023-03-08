@@ -13,6 +13,10 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+}
+
 mirai {
     jvmTarget = JavaVersion.VERSION_17
 }

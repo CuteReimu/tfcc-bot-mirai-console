@@ -27,6 +27,6 @@ const val STOP_LIVE = "https://api.live.bilibili.com/room/v1/Room/stopLive"
 const val UPDATE_TITLE = "https://api.live.bilibili.com/room/v1/Room/update"
 
 
-fun LIVE_INFO(room_id: Long): String {
-    return LIVE_INFO + room_id
+fun LIVE_INFO(roomId: Int): String {
+    return LIVE_INFO + roomId
 }

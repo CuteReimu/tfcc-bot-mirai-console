@@ -10,7 +10,9 @@ import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.event.globalEventChannel
 import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.PlainText
+import org.tfcc.bot.bilibili.Bilibili
 import org.tfcc.bot.command.ShowTips
+import org.tfcc.bot.storage.BilibiliData
 import org.tfcc.bot.storage.PermData
 import org.tfcc.bot.storage.TFCCConfig
 
@@ -23,8 +25,10 @@ internal object PluginMain : KotlinPlugin(
     )
 ) {
     override fun onEnable() {
+        BilibiliData.reload()
         TFCCConfig.reload()
         PermData.reload()
+        Bilibili.init()
         initCommandHandler()
     }
 

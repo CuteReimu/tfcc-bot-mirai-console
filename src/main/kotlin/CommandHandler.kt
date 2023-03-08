@@ -3,7 +3,6 @@ package org.tfcc.bot
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.MessageChain
-import net.mamoe.mirai.utils.MiraiLogger
 import org.tfcc.bot.command.*
 
 /**
@@ -38,11 +37,8 @@ interface CommandHandler {
             ShowTips,
             AddAdmin, RemoveAdmin, ListAllAdmin,
             AddWhitelist, RemoveWhitelist, CheckWhitelist,
+            GetLiveState, StartLive, StopLive, ChangeLiveTitle,
             RandGame,
         )
-
-        val logger: MiraiLogger by lazy {
-            MiraiLogger.Factory.create(this::class, this::class.java.name)
-        }
     }
 }
