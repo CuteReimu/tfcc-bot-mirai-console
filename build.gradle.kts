@@ -13,10 +13,6 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation("log4j:log4j:1.2.17")
-}
-
 mirai {
     jvmTarget = JavaVersion.VERSION_17
 }

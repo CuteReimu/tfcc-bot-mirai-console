@@ -1,11 +1,15 @@
 package org.tfcc.bot
 
+import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.event.events.GroupMessageEvent
-import org.tfcc.bot.command.RandGame
+import net.mamoe.mirai.message.data.MessageChain
+import net.mamoe.mirai.utils.MiraiLogger
+import org.tfcc.bot.command.*
 
 /**
  * 这是聊天指令处理器的接口，当你想要新增自己的聊天指令处理器时，实现这个接口即可。
  */
+@ConsoleExperimentalApi
 interface CommandHandler {
     /**
      * 群友输入聊天指令时，第一个空格前的内容
@@ -27,11 +31,18 @@ interface CommandHandler {
      * @param content 除开指令名（第一个空格前的部分）以外剩下的所有内容
      * @return 要发送的群聊消息和私聊消息，为空就是不发送消息
      */
-    fun execute(msg: GroupMessageEvent, content: String): Pair<String?, String?>
+    fun execute(msg: GroupMessageEvent, content: String): Pair<MessageChain?, MessageChain?>
 
     companion object {
         val handlers = arrayOf(
+            ShowTips,
+            AddAdmin, RemoveAdmin, ListAllAdmin,
+            AddWhitelist, RemoveWhitelist, CheckWhitelist,
             RandGame,
         )
+
+        val logger: MiraiLogger by lazy {
+            MiraiLogger.Factory.create(this::class, this::class.java.name)
+        }
     }
 }

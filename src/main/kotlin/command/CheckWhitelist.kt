@@ -6,33 +6,22 @@ import net.mamoe.mirai.message.data.MessageChain
 import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.message.data.toMessageChain
 import org.tfcc.bot.CommandHandler
-import kotlin.random.Random
+import org.tfcc.bot.storage.PermData
 
 @ConsoleExperimentalApi
-object RandGame : CommandHandler {
-    override val name = "随作品"
+object CheckWhitelist : CommandHandler {
+    override val name = "查看白名单"
 
-    override fun showTips(groupCode: Long, senderId: Long) = "随作品"
+    override fun showTips(groupCode: Long, senderId: Long) = "查看白名单 对方QQ号"
 
     override fun checkAuth(groupCode: Long, senderId: Long) = true
 
     override fun execute(msg: GroupMessageEvent, content: String): Pair<MessageChain?, MessageChain?> {
-        val result = games[Random.nextInt(games.size)]
+        val qq = runCatching { content.toLong() }.getOrNull()
+            ?: return Pair(PlainText("指令格式如下：\n查看白名单 对方QQ号").toMessageChain(), null)
+        val result =
+            if (PermData.isWhitelist(qq)) "${content}是白名单"
+            else "${content}不是白名单"
         return Pair(PlainText(result).toMessageChain(), null)
     }
-
-    private val games = arrayOf(
-        "东方红魔乡",
-        "东方妖妖梦",
-        "东方永夜抄",
-        "东方风神录",
-        "东方地灵殿",
-        "东方星莲船",
-        "东方神灵庙",
-        "东方辉针城",
-        "东方绀珠传",
-        "东方天空璋",
-        "东方鬼形兽",
-        "东方虹龙洞"
-    )
 }
