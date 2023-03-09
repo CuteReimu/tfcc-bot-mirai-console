@@ -15,6 +15,15 @@ object RepeaterInterruption {
         TFCCConfig.repeaterInterruption.qqGroup.forEach { data[it] = RepeaterData() }
     }
 
+    fun clean(groupCode: Long) {
+        data[groupCode]?.let {
+            synchronized(it) {
+                it.lastMessage = ""
+                it.counter = 0
+            }
+        }
+    }
+
     @OptIn(DelicateCoroutinesApi::class)
     fun handle(e: GroupMessageEvent) {
         val data = this.data[e.group.id] ?: return

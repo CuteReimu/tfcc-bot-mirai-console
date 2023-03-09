@@ -68,8 +68,10 @@ interface CommandHandler {
                 handlers.forEach {
                     if (it.name == cmd && it.checkAuth(e.group.id, e.sender.id)) {
                         val (groupMsg, privateMsg) = it.execute(e, content)
-                        if (groupMsg != null)
+                        if (groupMsg != null) {
                             e.group.sendMessage(groupMsg)
+                            RepeaterInterruption.clean(e.group.id)
+                        }
                         if (privateMsg != null)
                             e.sender.sendMessage(privateMsg)
                     }
