@@ -19,7 +19,7 @@ object RandGame : CommandHandler {
         return Pair(PlainText(result).toMessageChain(), null)
     }
 
-    private val games = arrayOf(
+    internal val games = arrayOf(
         "东方红魔乡",
         "东方妖妖梦",
         "东方永夜抄",

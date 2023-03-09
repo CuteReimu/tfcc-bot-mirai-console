@@ -42,7 +42,7 @@ interface CommandHandler {
             AddAdmin, RemoveAdmin, ListAllAdmin,
             AddWhitelist, RemoveWhitelist, CheckWhitelist,
             GetLiveState, StartLive, StopLive, ChangeLiveTitle,
-            RandGame, RandCharacter,
+            RandGame, RandCharacter, RandSpell,
         )
 
         @OptIn(DelicateCoroutinesApi::class)

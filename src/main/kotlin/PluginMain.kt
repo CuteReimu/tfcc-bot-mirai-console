@@ -10,6 +10,7 @@ import net.mamoe.mirai.event.globalEventChannel
 import org.tfcc.bot.bilibili.Bilibili
 import org.tfcc.bot.storage.BilibiliData
 import org.tfcc.bot.storage.PermData
+import org.tfcc.bot.storage.RandSpellData
 import org.tfcc.bot.storage.TFCCConfig
 import kotlin.reflect.KClass
 
@@ -24,6 +25,7 @@ internal object PluginMain : KotlinPlugin(
         BilibiliData.reload()
         TFCCConfig.reload()
         PermData.reload()
+        RandSpellData.reload()
         Bilibili.init()
         RepeaterInterruption.init()
         initHandler(GroupMessageEvent::class, CommandHandler::handle)
