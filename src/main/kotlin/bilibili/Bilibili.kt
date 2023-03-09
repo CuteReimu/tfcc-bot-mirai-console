@@ -54,16 +54,18 @@ object Bilibili {
             .connectTimeout(Duration.ofMillis(20000))
             .cookieJar(object : CookieJar {
                 override fun loadForRequest(url: HttpUrl): List<Cookie> {
-                    return BilibiliData.cookies.map {
+                    return BilibiliData.cookies.map {// 单独的读和写本身由底层保证并发安全
                         Cookie.parse(url, it)!!
                     }
                 }
 
                 override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-                    val oldCookies = BilibiliData.cookies.map { Cookie.parse(url, it)!! }
-                    BilibiliData.cookies = oldCookies.plus(cookies).distinctBy { it.name }.map {
-                        cookies.find { cookie -> it.name == cookie.name }?.toString()
-                            ?: oldCookies.first { cookie -> it.name == cookie.name }.toString()
+                    synchronized(BilibiliData) { // 这里既读又写需要保证是原子操作，需要加锁
+                        val oldCookies = BilibiliData.cookies.map { Cookie.parse(url, it)!! }
+                        BilibiliData.cookies = oldCookies.plus(cookies).distinctBy { it.name }.map {
+                            cookies.find { cookie -> it.name == cookie.name }?.toString()
+                                ?: oldCookies.first { cookie -> it.name == cookie.name }.toString()
+                        }
                     }
                 }
             })

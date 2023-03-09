@@ -16,7 +16,7 @@ object PermData : AutoSavePluginData("PermData") {
         TFCCConfig.isSuperAdmin(qq) || qq in admin
 
     fun addAdmin(qq: Long): Boolean {
-        synchronized(PermData::class) {
+        synchronized(PermData) {
             if (qq in admin) return false
             admin = admin.plus(qq)
             return true
@@ -24,7 +24,7 @@ object PermData : AutoSavePluginData("PermData") {
     }
 
     fun removeAdmin(qq: Long): Boolean {
-        synchronized(PermData::class) {
+        synchronized(PermData) {
             if (qq !in admin) return false
             admin = admin.minus(qq)
             return true
@@ -32,7 +32,7 @@ object PermData : AutoSavePluginData("PermData") {
     }
 
     fun listAdmin(): LongArray {
-        synchronized(PermData::class) {
+        synchronized(PermData) {
             return longArrayOf(TFCCConfig.qq.superAdminQQ).plus(admin)
         }
     }
@@ -41,7 +41,7 @@ object PermData : AutoSavePluginData("PermData") {
         qq in whiteList
 
     fun addWhitelist(qq: Long): Boolean {
-        synchronized(PermData::class) {
+        synchronized(PermData) {
             if (qq in whiteList) return false
             whiteList = whiteList.plus(qq)
             return true
@@ -49,7 +49,7 @@ object PermData : AutoSavePluginData("PermData") {
     }
 
     fun removeWhitelist(qq: Long): Boolean {
-        synchronized(PermData::class) {
+        synchronized(PermData) {
             if (qq !in whiteList) return false
             whiteList = whiteList.minus(qq)
             return true
