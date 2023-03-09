@@ -51,6 +51,11 @@ qq:
   super_admin_qq: 12345678  # 主管理员QQ号
   qq_group: # 主要功能的QQ群
     - 12345678
+repeater_interruption:
+  allowance: 5  # 打断复读功能限制的复读次数
+  cool_down: 3  # 打断复读冷却时间（秒
+  qq_group: # 打断复读的QQ群
+    - 12345678
 ```
 
 修改配置文件后重新启动即可

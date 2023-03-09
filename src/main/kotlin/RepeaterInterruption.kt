@@ -45,9 +45,9 @@ object RepeaterInterruption {
         }
     }
 
-    private class RepeaterData {
-        var lastMessage = ""
-        var counter = 0
-        var lastTrigger = 0L
-    }
+    private class RepeaterData(
+        var lastMessage: String = "",
+        var counter: Int = 0,
+        var lastTrigger: Long = 0,
+    )
 }
