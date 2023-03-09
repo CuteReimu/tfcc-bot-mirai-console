@@ -67,4 +67,28 @@ object TFCCConfig : AutoSavePluginConfig("TFCCConfig") {
 
     fun isSuperAdmin(qq: Long) =
         qq == this.qq.superAdminQQ
+
+    @Serializable
+    class RepeaterInterruptionConfig(
+        /** 打断复读功能限制的复读次数 */
+        val allowance: Int,
+
+        @SerialName("cool_down")
+        /** 打断复读冷却时间（秒） */
+        val coolDown: Long,
+
+        @SerialName("qq_group")
+        /** 打断复读的QQ群 */
+        val qqGroup: LongArray,
+    )
+
+    @ValueName("repeater_interruption")
+    @ValueDescription("打断复读相关配置")
+    val repeaterInterruption: RepeaterInterruptionConfig by value(
+        RepeaterInterruptionConfig(
+            allowance = 5,
+            coolDown = 3,
+            qqGroup = longArrayOf(12345678)
+        )
+    )
 }

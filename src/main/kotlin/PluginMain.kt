@@ -25,7 +25,9 @@ internal object PluginMain : KotlinPlugin(
         TFCCConfig.reload()
         PermData.reload()
         Bilibili.init()
+        RepeaterInterruption.init()
         initHandler(GroupMessageEvent::class, CommandHandler::handle)
+        initHandler(GroupMessageEvent::class, RepeaterInterruption::handle)
     }
 
     private fun <E : Event> initHandler(eventClass: KClass<out E>, handler: (E) -> Unit) {
