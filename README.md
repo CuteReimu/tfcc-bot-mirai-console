@@ -55,6 +55,16 @@ qq:
 
 修改配置文件后重新启动即可
 
+## 开发相关
+
+如果你想要本地调试，执行如下命令即可：
+
+```shell
+./gradlew runConsole
+```
+
+上述命令会自动下载Mirai Console并运行，即可本地调试。本地调试时会生成一个`debug-sandbox`文件夹，和Mirai Console的文件夹结构基本相同，
+
 ## 功能一览
 
 - [x] 管理员、白名单
