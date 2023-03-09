@@ -1,6 +1,5 @@
 package org.tfcc.bot.command
 
-import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.MessageChain
 import net.mamoe.mirai.message.data.PlainText
@@ -11,7 +10,6 @@ import org.tfcc.bot.storage.BilibiliData
 import org.tfcc.bot.storage.PermData
 import org.tfcc.bot.storage.TFCCConfig
 
-@ConsoleExperimentalApi
 object ChangeLiveTitle : CommandHandler {
     override val name = "修改直播标题"
 

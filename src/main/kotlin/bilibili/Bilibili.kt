@@ -1,7 +1,6 @@
 package org.tfcc.bot.bilibili
 
 import kotlinx.serialization.json.JsonElement
-import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -12,7 +11,6 @@ import org.tfcc.bot.utils.decode
 import org.tfcc.bot.utils.json
 import java.time.Duration
 
-@ConsoleExperimentalApi
 object Bilibili {
     fun getRoomInfo(roomId: Int): LiveInfo {
         return getAndDecode(LIVE_INFO(roomId))

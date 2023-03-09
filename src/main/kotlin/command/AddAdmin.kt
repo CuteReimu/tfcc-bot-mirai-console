@@ -1,6 +1,5 @@
 package org.tfcc.bot.command
 
-import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.MessageChain
 import net.mamoe.mirai.message.data.PlainText
@@ -9,7 +8,6 @@ import org.tfcc.bot.CommandHandler
 import org.tfcc.bot.storage.PermData
 import org.tfcc.bot.storage.TFCCConfig
 
-@ConsoleExperimentalApi
 object AddAdmin : CommandHandler {
     override val name = "增加管理员"
 

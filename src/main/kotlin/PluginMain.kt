@@ -3,7 +3,6 @@ package org.tfcc.bot
 import kotlinx.coroutines.CoroutineExceptionHandler
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
-import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.event.Event
 import net.mamoe.mirai.event.EventPriority
 import net.mamoe.mirai.event.events.GroupMessageEvent
@@ -14,7 +13,6 @@ import org.tfcc.bot.storage.PermData
 import org.tfcc.bot.storage.TFCCConfig
 import kotlin.reflect.KClass
 
-@ConsoleExperimentalApi
 internal object PluginMain : KotlinPlugin(
     JvmPluginDescription(
         id = "org.tfcc.bot",

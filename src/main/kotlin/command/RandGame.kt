@@ -1,6 +1,5 @@
 package org.tfcc.bot.command
 
-import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.MessageChain
 import net.mamoe.mirai.message.data.PlainText
@@ -8,7 +7,6 @@ import net.mamoe.mirai.message.data.toMessageChain
 import org.tfcc.bot.CommandHandler
 import kotlin.random.Random
 
-@ConsoleExperimentalApi
 object RandGame : CommandHandler {
     override val name = "随作品"
 

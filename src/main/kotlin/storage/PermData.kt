@@ -1,9 +1,7 @@
 package org.tfcc.bot.storage
 
 import net.mamoe.mirai.console.data.*
-import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 
-@ConsoleExperimentalApi
 object PermData : AutoSavePluginData("PermData") {
     @ValueDescription("管理员")
     var admin: List<Long> by value(listOf())

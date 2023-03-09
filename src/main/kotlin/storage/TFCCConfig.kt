@@ -3,9 +3,7 @@ package org.tfcc.bot.storage
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import net.mamoe.mirai.console.data.*
-import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 
-@ConsoleExperimentalApi
 object TFCCConfig : AutoSavePluginConfig("TFCCConfig") {
     @Serializable
     class BilibiliConfig(

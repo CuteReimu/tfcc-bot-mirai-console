@@ -3,7 +3,6 @@ package org.tfcc.bot
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.MessageChain
@@ -14,7 +13,6 @@ import org.tfcc.bot.storage.TFCCConfig
 /**
  * 这是聊天指令处理器的接口，当你想要新增自己的聊天指令处理器时，实现这个接口即可。
  */
-@ConsoleExperimentalApi
 interface CommandHandler {
     /**
      * 群友输入聊天指令时，第一个空格前的内容
