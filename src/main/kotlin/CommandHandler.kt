@@ -57,9 +57,9 @@ interface CommandHandler {
                 if (!isAt && message.size > 2 || message.size > 3)
                     return@launch
                 val msg =
-                    if (isAt) (message.getOrNull(2) as? PlainText)?.content ?: ShowTips.name
-                    else (message.getOrNull(1) as? PlainText)?.content ?: return@launch
-                val msgContent = msg.trim()
+                    if (isAt) (message.getOrNull(2) as? PlainText)?.content?.trim()
+                    else (message.getOrNull(1) as? PlainText)?.content?.trim()
+                val msgContent = if (!msg.isNullOrEmpty()) msg else if (isAt) ShowTips.name else return@launch
                 if (msgContent.contains("\n") || msgContent.contains("\r"))
                     return@launch
                 val msgSlices = msgContent.split(" ", limit = 2)
