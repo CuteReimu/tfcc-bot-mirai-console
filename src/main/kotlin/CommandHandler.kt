@@ -53,7 +53,7 @@ interface CommandHandler {
             GlobalScope.launch {
                 if (message.size <= 1)
                     return@launch
-                val isAt = message.getOrNull(1)?.let { it is At } ?: false
+                val isAt = message.getOrNull(1)?.let { it is At && it.target == e.bot.id } ?: false
                 if (!isAt && message.size > 2 || message.size > 3)
                     return@launch
                 val msg =
