@@ -1,6 +1,9 @@
 package org.tfcc.bot.bilibili
 
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
 import kotlinx.serialization.json.JsonElement
+import net.mamoe.mirai.utils.MiraiLogger
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -41,33 +44,35 @@ object Bilibili {
         if (result.code != 0) throw Exception("更新直播间标题失败")
     }
 
+    private fun getQRCode(): QRCode {
+        return getAndDecode(GET_QRCODE)
+    }
+
+    private fun loginWithQRCode(qrCode: QRCode) {
+        val result = get(LOGIN_WITH_QRCODE + qrCode.oauthKey).decode<ResultData>()
+        if (result.code != 0) throw Exception("登录bilibili失败，错误信息${result.message}")
+    }
+
+    private val logger: MiraiLogger by lazy {
+        MiraiLogger.Factory.create(this::class, this::class.java.name)
+    }
 
     private const val ua =
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36 Edg/97.0.1072.69"
     private var client: OkHttpClient? = null
 
     fun init() {
-        client = OkHttpClient()
-            .newBuilder()
-            .connectTimeout(Duration.ofMillis(20000))
-            .cookieJar(object : CookieJar {
-                override fun loadForRequest(url: HttpUrl): List<Cookie> {
-                    return BilibiliData.cookies.map {// 单独的读和写本身由底层保证并发安全
-                        Cookie.parse(url, it)!!
-                    }
-                }
-
-                override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-                    synchronized(BilibiliData) { // 这里既读又写需要保证是原子操作，需要加锁
-                        val oldCookies = BilibiliData.cookies.map { Cookie.parse(url, it)!! }
-                        BilibiliData.cookies = oldCookies.plus(cookies).distinctBy { it.name }.map {
-                            cookies.find { cookie -> it.name == cookie.name }?.toString()
-                                ?: oldCookies.first { cookie -> it.name == cookie.name }.toString()
-                        }
-                    }
-                }
-            })
-            .build()
+        client = OkHttpClient().newBuilder()
+            .connectTimeout(Duration.ofMillis(20000)).cookieJar(CookieJarWithData).build()
+        if (!BilibiliData.cookies.any { it.startsWith("bili_jct") }) {
+            val qrCode = getQRCode()
+            val bits = QRCodeWriter().encode(qrCode.url, BarcodeFormat.QR_CODE, 26, 19)
+            val s = bits.toString("\u001B[48;5;0m  \u001B[0m", "\u001B[48;5;7m  \u001B[0m")
+            logger.info("\n$s")
+            logger.info("B站登录过期，请扫码登录B站后按回车")
+            readlnOrNull()
+            loginWithQRCode(qrCode)
+        }
     }
 
     private fun sendRequest(request: Request): JsonElement {
@@ -107,5 +112,23 @@ object Bilibili {
         if (resp.code != 0)
             throw Exception("获取信息失败，错误码：${resp.code}，错误信息1：${resp.message}，错误信息2：${resp.msg}")
         return resp.data!!.decode()
+    }
+
+    private object CookieJarWithData : CookieJar {
+        override fun loadForRequest(url: HttpUrl): List<Cookie> {
+            return BilibiliData.cookies.map {// 单独的读和写本身由底层保证并发安全
+                Cookie.parse(url, it)!!
+            }
+        }
+
+        override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
+            synchronized(BilibiliData) { // 这里既读又写需要保证是原子操作，需要加锁
+                val oldCookies = BilibiliData.cookies.map { Cookie.parse(url, it)!! }
+                BilibiliData.cookies = oldCookies.plus(cookies).distinctBy { it.name }.map {
+                    cookies.find { cookie -> it.name == cookie.name }?.toString()
+                        ?: oldCookies.first { cookie -> it.name == cookie.name }.toString()
+                }
+            }
+        }
     }
 }

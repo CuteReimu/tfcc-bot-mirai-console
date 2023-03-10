@@ -60,6 +60,11 @@ repeater_interruption:
 
 修改配置文件后重新启动即可
 
+## 登录B站
+
+第一次运行会提示扫码登录B站，此后会记录Cookies，无需再次登录。
+如果提示Cookies超时，或者其他原因需要重新扫码，删除 `data/org.tfcc.bot/BilibiliData.yml` 即可。
+
 ## 开发相关
 
 如果你想要本地调试，执行如下命令即可：

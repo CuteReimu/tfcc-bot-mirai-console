@@ -13,6 +13,12 @@ const val GET_KEY = "https://passport.bilibili.com/login?act=getkey"
 //             key, challenge, validate, seccode
 const val LOGIN = "http://passport.bilibili.com/web/login/v2"
 
+// GET
+const val GET_QRCODE = "https://passport.bilibili.com/qrcode/getLoginUrl"
+
+// POST
+const val LOGIN_WITH_QRCODE = "https://passport.bilibili.com/x/passport-login/web/qrcode/poll?qrcode_key="
+
 // Live
 // GET  Para: room_id
 const val LIVE_INFO = "https://api.live.bilibili.com/room/v1/Room/get_info?id="

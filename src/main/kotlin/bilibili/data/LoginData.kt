@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class VerifyData(
+class VerifyData(
 
     @SerialName("type")
     val type: String,
@@ -18,12 +18,23 @@ data class VerifyData(
 )
 
 @Serializable
-data class Geetest(
+class Geetest(
 
     @SerialName("challenge")
     val challenge: String,
 
     @SerialName("gt")
     val gt: String
+
+)
+
+@Serializable
+class QRCode(
+
+    @SerialName("url")
+    val url: String,
+
+    @SerialName("oauthKey")
+    val oauthKey: String
 
 )
