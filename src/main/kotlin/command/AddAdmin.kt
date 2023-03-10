@@ -20,7 +20,7 @@ object AddAdmin : CommandHandler {
             runCatching { it.toLong() }.getOrNull() ?: return Pair(null, null)
         }
         if (qqNumbers.isEmpty()) return Pair(null, null)
-        val (succeed, failed) = qqNumbers.partition { PermData.addAdmin(it) }
+        val (succeed, failed) = qqNumbers.partition { !TFCCConfig.isSuperAdmin(it) && PermData.addAdmin(it) }
         val result =
             if (succeed.isNotEmpty()) succeed.joinToString(prefix = "已增加管理员：")
             else failed.joinToString(postfix = "已经是管理员了")
