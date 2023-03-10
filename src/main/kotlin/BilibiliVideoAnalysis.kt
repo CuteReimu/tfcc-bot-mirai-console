@@ -1,10 +1,12 @@
 package org.tfcc.bot
 
 import bilibili.data.VideoData
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.serialization.json.jsonObject
 import net.mamoe.mirai.event.events.GroupMessageEvent
-import net.mamoe.mirai.message.data.*
+import net.mamoe.mirai.message.data.PlainText
+import net.mamoe.mirai.message.data.content
+import net.mamoe.mirai.message.data.messageChainOf
+import net.mamoe.mirai.message.data.toMessageChain
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import net.mamoe.mirai.utils.MiraiLogger
 import org.tfcc.bot.bilibili.Bilibili
@@ -25,7 +27,6 @@ object BilibiliVideoAnalysis {
         RegexOption.IGNORE_CASE
     )
 
-    @OptIn(DelicateCoroutinesApi::class)
     suspend fun handle(e: GroupMessageEvent) {
         val content = e.message.content
         val result = tryAvid(content) ?: tryBvid(content) ?: return
@@ -33,8 +34,8 @@ object BilibiliVideoAnalysis {
             if (result.pic.isNullOrEmpty()) null
             else {
                 runCatching {
-                    Bilibili.getPic(result.pic).use {
-                        e.group.uploadImage(it.toExternalResource())
+                    Bilibili.getPic(result.pic).use { `is` ->
+                        `is`.toExternalResource().use { e.group.uploadImage(it) }
                     }
                 }.getOrElse {
                     logger.error("获取或上传封面失败", it)
