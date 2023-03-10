@@ -1,6 +1,9 @@
 package org.tfcc.bot
 
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.Event
@@ -30,9 +33,10 @@ internal object PluginMain : KotlinPlugin(
         RepeaterInterruption.init()
         initHandler(GroupMessageEvent::class, CommandHandler::handle)
         initHandler(GroupMessageEvent::class, RepeaterInterruption::handle)
+        initHandler(GroupMessageEvent::class, BilibiliVideoAnalysis::handle)
     }
 
-    private fun <E : Event> initHandler(eventClass: KClass<out E>, handler: (E) -> Unit) {
+    private fun <E : Event> initHandler(eventClass: KClass<out E>, handler: suspend (E) -> Unit) {
         globalEventChannel().subscribeAlways(
             eventClass,
             CoroutineExceptionHandler { _, throwable ->
@@ -40,7 +44,10 @@ internal object PluginMain : KotlinPlugin(
             },
             priority = EventPriority.MONITOR,
         ) {
-            handler(this)
+            @OptIn(DelicateCoroutinesApi::class)
+            GlobalScope.launch {
+                handler(this@subscribeAlways)
+            }
         }
     }
 }

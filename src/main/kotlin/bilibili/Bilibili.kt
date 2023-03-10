@@ -1,5 +1,6 @@
 package org.tfcc.bot.bilibili
 
+import bilibili.data.VideoData
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
 import kotlinx.serialization.json.JsonElement
@@ -12,6 +13,7 @@ import org.tfcc.bot.bilibili.data.*
 import org.tfcc.bot.storage.BilibiliData
 import org.tfcc.bot.utils.decode
 import org.tfcc.bot.utils.json
+import java.io.InputStream
 import java.time.Duration
 
 object Bilibili {
@@ -53,6 +55,21 @@ object Bilibili {
         if (result.code != 0) throw Exception("登录bilibili失败，错误信息${result.message}")
     }
 
+    fun getVideoData(opt: String): VideoData {
+        return getAndDecode("${VIDEO_INFO}?$opt")
+    }
+
+    fun getPic(url: String): InputStream {
+        val request = Request.Builder().url(url)
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .header("user-agent", ua)
+            .get().build()
+        val resp = client!!.newCall(request).execute()
+        if (resp.code != 200)
+            throw Exception("请求错误，错误码：${resp.code}，返回内容：${resp.message}")
+        return resp.body!!.byteStream()
+    }
+
     private val logger: MiraiLogger by lazy {
         MiraiLogger.Factory.create(this::class, this::class.java.name)
     }
@@ -79,7 +96,7 @@ object Bilibili {
         val resp = client!!.newCall(request).execute()
         if (resp.code != 200)
             throw Exception("请求错误，错误码：${resp.code}，返回内容：${resp.message}")
-        val body: String = resp.body!!.string()
+        val body = resp.body!!.string()
         return json.parseToJsonElement(body)
     }
 
@@ -116,14 +133,14 @@ object Bilibili {
 
     private object CookieJarWithData : CookieJar {
         override fun loadForRequest(url: HttpUrl): List<Cookie> {
-            return BilibiliData.cookies.map {// 单独的读和写本身由底层保证并发安全
-                Cookie.parse(url, it)!!
+            return BilibiliData.cookies.mapNotNull {// 单独的读和写本身由底层保证并发安全
+                Cookie.parse(url, it)
             }
         }
 
         override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
             synchronized(BilibiliData) { // 这里既读又写需要保证是原子操作，需要加锁
-                val oldCookies = BilibiliData.cookies.map { Cookie.parse(url, it)!! }
+                val oldCookies = BilibiliData.cookies.mapNotNull { Cookie.parse(url, it) }
                 BilibiliData.cookies = oldCookies.plus(cookies).distinctBy { it.name }.map {
                     cookies.find { cookie -> it.name == cookie.name }?.toString()
                         ?: oldCookies.first { cookie -> it.name == cookie.name }.toString()

@@ -19,6 +19,9 @@ const val GET_QRCODE = "https://passport.bilibili.com/qrcode/getLoginUrl"
 // POST
 const val LOGIN_WITH_QRCODE = "https://passport.bilibili.com/x/passport-login/web/qrcode/poll?qrcode_key="
 
+// GET
+const val VIDEO_INFO = "https://api.bilibili.com/x/web-interface/view"
+
 // Live
 // GET  Para: room_id
 const val LIVE_INFO = "https://api.live.bilibili.com/room/v1/Room/get_info?id="
