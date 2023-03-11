@@ -2,6 +2,7 @@ package org.tfcc.bot
 
 import bilibili.data.VideoData
 import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.message.data.content
@@ -44,7 +45,7 @@ object BilibiliVideoAnalysis {
             }
         val desc = result.desc ?: ""
         val descString = if (desc.length > 100) desc.substring(0, 100) + "。。。" else desc
-        val up = runCatching { result.owner?.jsonObject?.get("name") }.getOrNull()
+        val up = runCatching { result.owner?.jsonObject?.get("name")?.jsonPrimitive?.content }.getOrNull()
         val text = PlainText(
             "${result.title}\n" +
                     "https://www.bilibili.com/video/${result.bvid}\n" +
