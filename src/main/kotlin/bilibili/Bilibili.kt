@@ -70,6 +70,19 @@ object Bilibili {
         return resp.body!!.byteStream()
     }
 
+    fun resolveShortUrl(url: String): String? {
+        val request = Request.Builder().url(url)
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .header("user-agent", ua)
+            .get().build()
+        val resp = client!!.newCall(request).execute()
+        if (resp.code != 302) {
+            resp.close()
+            throw Exception("解析短链接失败，错误码：${resp.code}，返回内容：${resp.message}")
+        }
+        return resp.use { it.headers("Location").firstOrNull() }
+    }
+
     private val logger: MiraiLogger by lazy {
         MiraiLogger.Factory.create(this::class, this::class.java.name)
     }
@@ -79,7 +92,7 @@ object Bilibili {
     private var client: OkHttpClient? = null
 
     fun init() {
-        client = OkHttpClient().newBuilder()
+        client = OkHttpClient().newBuilder().followRedirects(false)
             .connectTimeout(Duration.ofMillis(20000)).cookieJar(CookieJarWithData).build()
         if (!BilibiliData.cookies.any { it.startsWith("bili_jct") }) {
             val qrCode = getQRCode()
@@ -94,8 +107,10 @@ object Bilibili {
 
     private fun sendRequest(request: Request): JsonElement {
         val resp = client!!.newCall(request).execute()
-        if (resp.code != 200)
+        if (resp.code != 200) {
+            resp.close()
             throw Exception("请求错误，错误码：${resp.code}，返回内容：${resp.message}")
+        }
         val body = resp.body!!.string()
         return json.parseToJsonElement(body)
     }

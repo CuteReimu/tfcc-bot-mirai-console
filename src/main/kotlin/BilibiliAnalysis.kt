@@ -26,7 +26,7 @@ object BilibiliAnalysis {
     )
 
     private val shortReg = Regex(
-        "https?://b23\\.tv/[0-9A-Za-z]{7}",
+        "https?://b23\\.tv/[0-9A-Za-z]{7}\$",
         RegexOption.IGNORE_CASE
     )
 
@@ -37,8 +37,19 @@ object BilibiliAnalysis {
     suspend fun handle(e: GroupMessageEvent) {
         if (e.group.id !in TFCCConfig.qq.qqGroup)
             return
-        val content = e.message.content
-        tryVideo(e, content) || tryLive(e, content)
+        val content = e.message.content.trim()
+        val content2 = tryShortUrl(content) ?: content
+        tryVideo(e, content2) || tryLive(e, content2)
+    }
+
+    private fun tryShortUrl(content: String): String? {
+        try {
+            val result = shortReg.find(content) ?: return null
+            return Bilibili.resolveShortUrl(result.value)
+        } catch (e: Exception) {
+            logger.error("解析短链接失败：", e)
+        }
+        return null
     }
 
     private suspend fun tryVideo(e: GroupMessageEvent, content: String): Boolean {
@@ -71,19 +82,19 @@ object BilibiliAnalysis {
     }
 
     private fun tryAvid(content: String): VideoData? {
-        val result = avReg.matchEntire(content) ?: return null
+        val result = avReg.matchAt(content, 0) ?: return null
         val aid = result.groupValues.last()
         return Bilibili.getVideoData("aid=${aid}")
     }
 
     private fun tryBvid(content: String): VideoData? {
-        val result = bvReg.matchEntire(content) ?: return null
+        val result = bvReg.matchAt(content, 0) ?: return null
         val bvid = result.groupValues.last()
         return Bilibili.getVideoData("bvid=${bvid}")
     }
 
     private suspend fun tryLive(e: GroupMessageEvent, content: String): Boolean {
-        val regResult = liveReg.matchEntire(content) ?: return false
+        val regResult = liveReg.matchAt(content, 0) ?: return false
         val roomId = regResult.groupValues.last()
         val result = Bilibili.getRoomInfo(roomId.toInt())
         val image =
