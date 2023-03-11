@@ -12,7 +12,13 @@ class LiveInfo(
     val title: String,
 
     @SerialName("online")
-    val online: Int
+    val online: Int,
+
+    @SerialName("user_cover")
+    val cover: String?,
+
+    @SerialName("description")
+    val desc: String?
 )
 
 

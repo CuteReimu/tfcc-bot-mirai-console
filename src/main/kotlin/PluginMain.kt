@@ -33,7 +33,7 @@ internal object PluginMain : KotlinPlugin(
         RepeaterInterruption.init()
         initHandler(GroupMessageEvent::class, CommandHandler::handle)
         initHandler(GroupMessageEvent::class, RepeaterInterruption::handle)
-        initHandler(GroupMessageEvent::class, BilibiliVideoAnalysis::handle)
+        initHandler(GroupMessageEvent::class, BilibiliAnalysis::handle)
     }
 
     private fun <E : Event> initHandler(eventClass: KClass<out E>, handler: suspend (E) -> Unit) {
