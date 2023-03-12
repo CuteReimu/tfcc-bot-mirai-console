@@ -115,7 +115,7 @@ object BilibiliAnalysis {
             "${result.title}\n" +
                     "${LIVE}${roomId}\n" +
                     "人气：${result.online}\n" +
-                    "视频简介：$descString"
+                    "直播简介：$descString"
         )
         val msg = if (image == null) text.toMessageChain() else messageChainOf(image, text)
         e.group.sendMessage(msg)
