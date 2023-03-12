@@ -26,6 +26,7 @@ object StopLive : CommandHandler {
         }
         val roomId = TFCCConfig.bilibili.roomId
         val ret = Bilibili.stopLive(roomId)
+        BilibiliData.live = 0
         val publicText =
             if (ret.change == 0) "直播间本来就是关闭的"
             else "直播间已关闭"
