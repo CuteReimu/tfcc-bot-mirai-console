@@ -1,8 +1,6 @@
 package org.tfcc.bot
 
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
@@ -44,10 +42,7 @@ internal object PluginMain : KotlinPlugin(
             },
             priority = EventPriority.MONITOR,
         ) {
-            @OptIn(DelicateCoroutinesApi::class)
-            GlobalScope.launch {
-                handler(this@subscribeAlways)
-            }
+            launch { handler(this@subscribeAlways) }
         }
     }
 }

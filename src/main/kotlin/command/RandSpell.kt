@@ -1,9 +1,9 @@
 package org.tfcc.bot.command
 
 import net.mamoe.mirai.event.events.GroupMessageEvent
-import net.mamoe.mirai.message.data.MessageChain
+import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.PlainText
-import net.mamoe.mirai.message.data.toMessageChain
+import net.mamoe.mirai.message.data.toPlainText
 import org.tfcc.bot.CommandHandler
 import org.tfcc.bot.storage.RandSpellData
 import org.tfcc.bot.storage.RandSpellData.RandData
@@ -19,20 +19,16 @@ object RandSpell : CommandHandler {
 
     override fun checkAuth(groupCode: Long, senderId: Long) = true
 
-    override fun execute(msg: GroupMessageEvent, content: String): Pair<MessageChain?, MessageChain?> {
+    override suspend fun execute(msg: GroupMessageEvent, content: String): Message? {
         val oneTimeLimit = TFCCConfig.qq.randOneTimeLimit
-        if (content.isEmpty()) {
-            val result = "请输入要随机的作品与符卡数量，例如：“随符卡 红”或“随符卡 全部 ${oneTimeLimit}”"
-            return Pair(PlainText(result).toMessageChain(), null)
-        }
+        if (content.isEmpty())
+            return PlainText("请输入要随机的作品与符卡数量，例如：“随符卡 红”或“随符卡 全部 ${oneTimeLimit}”")
         val cmds = content.split(" ", limit = 2)
         val game = cmds[0]
         val count = cmds.getOrNull(1)?.toInt() ?: 1 // 默认抽取一张符卡
-        val v = gameMap[game] ?: return Pair(null, null)
-        if (count > v.size) {
-            val result = "请输入小于或等于该作符卡数量${v.size}的数字"
-            return Pair(PlainText(result).toMessageChain(), null)
-        }
+        val v = gameMap[game] ?: return null
+        if (count > v.size)
+            return PlainText("请输入小于或等于该作符卡数量${v.size}的数字")
         val text: String?
         synchronized(RandSpellData) {
             val m = RandSpellData.randData.toMutableMap()
@@ -55,7 +51,7 @@ object RandSpell : CommandHandler {
             d.lastRandTime = now.time.time
             RandSpellData.randData = m
         }
-        return Pair(if (text != null) PlainText(text).toMessageChain() else null, null)
+        return text?.toPlainText()
     }
 
     private val gameMap = RandGame.games.plus("全部").flatMap { game ->

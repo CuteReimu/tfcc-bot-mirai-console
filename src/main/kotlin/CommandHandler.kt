@@ -2,7 +2,7 @@ package org.tfcc.bot
 
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.At
-import net.mamoe.mirai.message.data.MessageChain
+import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.PlainText
 import org.tfcc.bot.command.*
 import org.tfcc.bot.storage.TFCCConfig
@@ -29,9 +29,9 @@ interface CommandHandler {
     /**
      * 执行指令
      * @param content 除开指令名（第一个空格前的部分）以外剩下的所有内容
-     * @return 要发送的群聊消息和私聊消息，为空就是不发送消息
+     * @return 要发送的群聊消息，为空就是不发送消息
      */
-    fun execute(msg: GroupMessageEvent, content: String): Pair<MessageChain?, MessageChain?>
+    suspend fun execute(msg: GroupMessageEvent, content: String): Message?
 
     companion object {
         val handlers = arrayOf(
@@ -62,13 +62,9 @@ interface CommandHandler {
             val content = msgSlices.getOrElse(1) { "" }
             handlers.forEach {
                 if (it.name == cmd && it.checkAuth(e.group.id, e.sender.id)) {
-                    val (groupMsg, privateMsg) = it.execute(e, content)
-                    if (groupMsg != null) {
-                        e.group.sendMessage(groupMsg)
-                        RepeaterInterruption.clean(e.group.id)
-                    }
-                    if (privateMsg != null)
-                        e.sender.sendMessage(privateMsg)
+                    val groupMsg = it.execute(e, content) ?: return@forEach
+                    e.group.sendMessage(groupMsg)
+                    RepeaterInterruption.clean(e.group.id)
                 }
             }
         }

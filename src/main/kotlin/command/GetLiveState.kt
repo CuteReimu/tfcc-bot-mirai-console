@@ -1,9 +1,8 @@
 package org.tfcc.bot.command
 
 import net.mamoe.mirai.event.events.GroupMessageEvent
-import net.mamoe.mirai.message.data.MessageChain
+import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.PlainText
-import net.mamoe.mirai.message.data.toMessageChain
 import org.tfcc.bot.CommandHandler
 import org.tfcc.bot.bilibili.Bilibili
 import org.tfcc.bot.bilibili.data.LIVE
@@ -16,7 +15,7 @@ object GetLiveState : CommandHandler {
 
     override fun checkAuth(groupCode: Long, senderId: Long) = true
 
-    override fun execute(msg: GroupMessageEvent, content: String): Pair<MessageChain?, MessageChain?> {
+    override suspend fun execute(msg: GroupMessageEvent, content: String): Message {
         val liveInfo = Bilibili.getRoomInfo(TFCCConfig.bilibili.roomId)
         val result =
             if (liveInfo.liveStatus == 0) "直播间状态：未开播"
@@ -24,6 +23,6 @@ object GetLiveState : CommandHandler {
                     "直播标题：${liveInfo.title}\n" +
                     "人气：${liveInfo.online}\n" +
                     "直播间地址：${LIVE + TFCCConfig.bilibili.roomId.toString()}"
-        return Pair(PlainText(result).toMessageChain(), null)
+        return PlainText(result)
     }
 }

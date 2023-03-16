@@ -1,9 +1,8 @@
 package org.tfcc.bot.command
 
 import net.mamoe.mirai.event.events.GroupMessageEvent
-import net.mamoe.mirai.message.data.MessageChain
+import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.PlainText
-import net.mamoe.mirai.message.data.toMessageChain
 import org.tfcc.bot.CommandHandler
 import kotlin.random.Random
 
@@ -14,12 +13,12 @@ object RandCharacter : CommandHandler {
 
     override fun checkAuth(groupCode: Long, senderId: Long) = true
 
-    override fun execute(msg: GroupMessageEvent, content: String): Pair<MessageChain?, MessageChain?> {
+    override suspend fun execute(msg: GroupMessageEvent, content: String): Message? {
         if (content.isEmpty())
-            return Pair(PlainText("请输入要随机的作品，例如：“随机体 红”").toMessageChain(), null)
-        val v = gameMap[content] ?: return Pair(null, null)
+            return PlainText("请输入要随机的作品，例如：“随机体 红”")
+        val v = gameMap[content] ?: return null
         val result = v.joinToString(separator = "") { it[Random.nextInt(it.size)] }
-        return Pair(PlainText(result).toMessageChain(), null)
+        return PlainText(result)
     }
 
     private val gameMap = mapOf(

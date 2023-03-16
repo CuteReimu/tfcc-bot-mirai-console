@@ -1,9 +1,8 @@
 package org.tfcc.bot.command
 
 import net.mamoe.mirai.event.events.GroupMessageEvent
-import net.mamoe.mirai.message.data.MessageChain
+import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.PlainText
-import net.mamoe.mirai.message.data.toMessageChain
 import org.tfcc.bot.CommandHandler
 import org.tfcc.bot.bilibili.Bilibili
 import org.tfcc.bot.storage.BilibiliData
@@ -17,15 +16,15 @@ object ChangeLiveTitle : CommandHandler {
 
     override fun checkAuth(groupCode: Long, senderId: Long) = PermData.isWhitelist(senderId)
 
-    override fun execute(msg: GroupMessageEvent, content: String): Pair<MessageChain?, MessageChain?> {
+    override suspend fun execute(msg: GroupMessageEvent, content: String): Message? {
         if (content.isEmpty())
-            return Pair(PlainText("指令格式如下：\n修改直播标题 新标题").toMessageChain(), null)
+            return PlainText("指令格式如下：\n修改直播标题 新标题")
         if (content.length > 20)
-            return Pair(null, null)
+            return null
         if (!PermData.isAdmin(msg.sender.id)) {
             val uid = BilibiliData.live
             if (uid != 0L && uid != msg.sender.id)
-                return Pair(PlainText("谢绝唐突修改直播标题").toMessageChain(), null)
+                return PlainText("谢绝唐突修改直播标题")
         }
         val roomId = TFCCConfig.bilibili.roomId
         val text =
@@ -33,6 +32,6 @@ object ChangeLiveTitle : CommandHandler {
                 "修改直播间标题失败，请联系管理员"
             else
                 "直播间标题已修改为：$content"
-        return Pair(PlainText(text).toMessageChain(), null)
+        return PlainText(text)
     }
 }
