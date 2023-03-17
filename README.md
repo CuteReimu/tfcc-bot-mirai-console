@@ -5,7 +5,7 @@
 ![](https://img.shields.io/github/languages/top/CuteReimu/tfcc-bot-mirai-console "语言")
 [![](https://img.shields.io/github/actions/workflow/status/CuteReimu/tfcc-bot-mirai-console/build.yml?branch=main)](https://github.com/CuteReimu/tfcc-bot-mirai-console/actions/workflows/golangci-lint.yml "代码分析")
 [![](https://img.shields.io/github/contributors/CuteReimu/tfcc-bot-mirai-console)](https://github.com/CuteReimu/tfcc-bot-mirai-console/graphs/contributors "贡献者")
-[![](https://img.shields.io/github/license/CuteReimu/tfcc-bot-mirai-console)](https://github.com/CuteReimu/tfcc-bot-mirai-console/blob/master/LICENSE "许可协议")
+[![](https://img.shields.io/github/license/CuteReimu/tfcc-bot-mirai-console)](https://github.com/CuteReimu/tfcc-bot-mirai-console/blob/main/LICENSE "许可协议")
 </div>
 
 这是东方Project沙包聚集地（以下简称“红群”）的机器人，基于 [Mirai](https://github.com/mamoe/mirai) 编写
