@@ -12,10 +12,13 @@ import kotlin.random.Random
 object RandOperation : CommandHandler {
     override val name = "随机操作"
 
-    override fun showTips(groupCode: Long, senderId: Long) =
-        "此功能为防止作弊而开发。\n" +
-                "机器人将生成十次随机方向操作指示，如↑，↓，←，→，…。\n" +
-                "在请求指示后，玩家需即刻在游戏内输入这些操作以证明游戏录像的真实性。"
+    override fun showTips(groupCode: Long, senderId: Long) = "\n" +
+        """
+            随机操作
+            此功能为防止作弊而开发。
+            机器人将生成十次随机方向操作指示，如↑，↓，←，→，…。
+            在请求指示后，玩家需即刻在游戏内输入这些操作以证明游戏录像的真实性。
+        """.trimIndent() + "\n"
 
     override fun checkAuth(groupCode: Long, senderId: Long) = true
 
@@ -25,7 +28,9 @@ object RandOperation : CommandHandler {
             record += randOperations[Random.nextInt(randOperations.size)]
         val text = record
         val now = Calendar.getInstance(TimeZone.getTimeZone("GMT+8:00"))
-        record += " - $now"
+        val time = "${now.get(Calendar.YEAR)}年${now.get(Calendar.MONTH)}月${now.get(Calendar.DATE)}日 "+
+                "${now.get(Calendar.HOUR_OF_DAY)}:${now.get(Calendar.MINUTE)}:${now.get(Calendar.SECOND)}"
+        record += "\n$time"
         RandOperationHistory.addRecord(msg.sender.id, record)
         return PlainText(text)
     }

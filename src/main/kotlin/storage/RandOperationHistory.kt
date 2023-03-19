@@ -43,7 +43,8 @@ object RandOperationHistory : AutoSavePluginData("RandOperationHistory") {
     fun getAllRecords(): List<String> {
         synchronized(RandOperationHistory) {
             val result = mutableListOf<String>()
-            for (records in history.values) {
+            for ((qq, records) in history) {
+                result.add("$qq:")
                 result.addAll(records)
             }
             return result

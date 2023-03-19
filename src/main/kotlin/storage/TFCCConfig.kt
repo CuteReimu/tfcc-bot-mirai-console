@@ -98,8 +98,7 @@ object TFCCConfig : AutoSavePluginConfig("TFCCConfig") {
         val number: Int,
     )
 
-    @ValueName("repeater_interruption")
-    @ValueDescription("打断复读相关配置")
+    @ValueDescription("随机操作的次数配置")
     val randOperation: RandOperationConfig by value(
         RandOperationConfig(
             number = 10

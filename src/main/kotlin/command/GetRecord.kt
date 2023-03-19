@@ -17,7 +17,7 @@ object GetRecord : CommandHandler {
         val qqNumbers = content.split(" ").map {
             runCatching { it.toLong() }.getOrNull()
         }
-        if (qqNumbers.isEmpty()) {
+        if (qqNumbers.isEmpty() || qqNumbers[0] == null) {
             val result = RandOperationHistory.getRecord(msg.sender.id)
             if (result.isNullOrEmpty()) return PlainText("未查询到记录")
             return PlainText(result.joinToString(separator = "\n", prefix = "随机操作记录：\n"))
@@ -26,7 +26,10 @@ object GetRecord : CommandHandler {
             for (qqNumber in qqNumbers) {
                 if (qqNumber == null) continue
                 val record = RandOperationHistory.getRecord(qqNumber)
-                if (record != null) result.addAll(record)
+                if (record != null) {
+                    result.add("$qqNumber:")
+                    result.addAll(record)
+                }
             }
             if (result.isEmpty()) return PlainText("未查询到记录")
             return PlainText(result.joinToString(separator = "\n", prefix = "随机操作记录：\n"))
