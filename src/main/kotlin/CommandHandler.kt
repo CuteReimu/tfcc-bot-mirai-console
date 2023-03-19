@@ -39,7 +39,8 @@ interface CommandHandler {
             AddAdmin, RemoveAdmin, ListAllAdmin,
             AddWhitelist, RemoveWhitelist, CheckWhitelist,
             GetLiveState, StartLive, StopLive, ChangeLiveTitle,
-            RandGame, RandCharacter, RandSpell,
+            RandGame, RandCharacter, RandSpell, RandOperation,
+            DeleteRecord, ClearRecords, GetRecord, GetALLRecords
         )
 
         suspend fun handle(e: GroupMessageEvent) {

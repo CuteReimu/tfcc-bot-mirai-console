@@ -91,4 +91,18 @@ object TFCCConfig : AutoSavePluginConfig("TFCCConfig") {
             qqGroup = longArrayOf(12345678)
         )
     )
+
+    @Serializable
+    class RandOperationConfig(
+        /** 随机操作的次数 */
+        val number: Int,
+    )
+
+    @ValueName("repeater_interruption")
+    @ValueDescription("打断复读相关配置")
+    val randOperation: RandOperationConfig by value(
+        RandOperationConfig(
+            number = 10
+        )
+    )
 }
