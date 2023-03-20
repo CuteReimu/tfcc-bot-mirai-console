@@ -1,6 +1,7 @@
 package org.tfcc.bot.storage
 
 import net.mamoe.mirai.console.data.*
+import org.tfcc.bot.PluginMain.save
 
 object RandOperationHistory : AutoSavePluginData("RandOperationHistory") {
     @ValueName("history")
@@ -9,11 +10,11 @@ object RandOperationHistory : AutoSavePluginData("RandOperationHistory") {
 
     fun addRecord(qq: Long, record: String) {
         synchronized(RandOperationHistory) {
-            if (qq !in history.keys) {
+            if (qq !in history.keys)
                 history[qq] = mutableListOf(record)
-            } else {
+            else
                 history[qq]!!.add(record)
-            }
+            RandOperationHistory.save()
         }
     }
 
@@ -23,6 +24,7 @@ object RandOperationHistory : AutoSavePluginData("RandOperationHistory") {
                 return false
             } else {
                 history.remove(qq)
+                RandOperationHistory.save()
                 return true
             }
         }
@@ -30,24 +32,20 @@ object RandOperationHistory : AutoSavePluginData("RandOperationHistory") {
 
     fun clearRecords() {
         synchronized(RandOperationHistory) {
-            history.clear()
+            history = mutableMapOf()
         }
     }
 
     fun getRecord(qq: Long): List<String>? {
         synchronized(RandOperationHistory) {
-            return history[qq]?.toList()
+            val result = history[qq] ?: return null
+            return result.subList((result.size) - TFCCConfig.randOperation.limit, result.size)
         }
     }
 
-    fun getAllRecords(): List<String> {
+    fun getAllRecords(qq: Long): List<String>? {
         synchronized(RandOperationHistory) {
-            val result = mutableListOf<String>()
-            for ((qq, records) in history) {
-                result.add("$qq:")
-                result.addAll(records)
-            }
-            return result
+            return history[qq]
         }
     }
 }

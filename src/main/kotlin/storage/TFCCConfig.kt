@@ -96,12 +96,14 @@ object TFCCConfig : AutoSavePluginConfig("TFCCConfig") {
     class RandOperationConfig(
         /** 随机操作的次数 */
         val number: Int,
+        val limit: Int,
     )
 
     @ValueDescription("随机操作的次数配置")
     val randOperation: RandOperationConfig by value(
         RandOperationConfig(
-            number = 10
+            number = 10,
+            limit = 10
         )
     )
 }

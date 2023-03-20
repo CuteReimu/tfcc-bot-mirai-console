@@ -10,7 +10,7 @@ import org.tfcc.bot.storage.PermData
 object DeleteRecord : CommandHandler {
     override val name = "删除随机操作记录"
 
-    override fun showTips(groupCode: Long, senderId: Long) = "删除随机操作记录 对方QQ号（参数为空则为自己的）"
+    override fun showTips(groupCode: Long, senderId: Long) = "删除随机操作记录 对方QQ号"
 
     override fun checkAuth(groupCode: Long, senderId: Long) = true
 
