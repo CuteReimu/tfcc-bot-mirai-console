@@ -1,7 +1,6 @@
 package org.tfcc.bot.storage
 
 import net.mamoe.mirai.console.data.*
-import org.tfcc.bot.PluginMain.save
 
 object RandOperationHistory : AutoSavePluginData("RandOperationHistory") {
     @ValueName("history")
@@ -10,29 +9,25 @@ object RandOperationHistory : AutoSavePluginData("RandOperationHistory") {
 
     fun addRecord(qq: Long, record: String) {
         synchronized(RandOperationHistory) {
+            val copy = history.toMutableMap()
             if (qq !in history.keys)
-                history[qq] = mutableListOf(record)
+                copy[qq] = mutableListOf(record)
             else
-                history[qq]!!.add(record)
-            RandOperationHistory.save()
+                copy[qq]!!.add(record)
+            history = copy
         }
     }
 
     fun deleteRecord(qq: Long): Boolean {
         synchronized(RandOperationHistory) {
+            val copy = history.toMutableMap()
             if (qq !in history.keys) {
                 return false
             } else {
-                history.remove(qq)
-                RandOperationHistory.save()
+                copy.remove(qq)
+                history = copy
                 return true
             }
-        }
-    }
-
-    fun clearRecords() {
-        synchronized(RandOperationHistory) {
-            history = mutableMapOf()
         }
     }
 
