@@ -16,7 +16,7 @@ object RandOperation : CommandHandler {
         """
             随机操作
             此功能为防止作弊而开发。
-            机器人将生成十次随机方向操作指示，如↑，↓，←，→，…。
+            机器人将生成${TFCCConfig.randOperation.number}次随机方向操作指示，如↑，↓，←，→，…。
             在请求指示后，玩家需即刻在游戏内输入这些操作以证明游戏录像的真实性。
         """.trimIndent() + "\n"
 
