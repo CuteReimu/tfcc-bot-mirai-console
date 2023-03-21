@@ -14,23 +14,17 @@ object GetRecord : CommandHandler {
     override fun checkAuth(groupCode: Long, senderId: Long) = true
 
     override suspend fun execute(msg: GroupMessageEvent, content: String): Message {
-        val qqNumbers = content.split(" ").map {
+        val qqNumbers = content.split(" ").mapNotNull {
             runCatching { it.toLong() }.getOrNull()
         }
-        if (qqNumbers.isEmpty() || qqNumbers[0] == null) {
+        if (qqNumbers.isEmpty()) {
             val result = RandOperationHistory.getRecord(msg.sender.id)
             if (result.isNullOrEmpty()) return PlainText("未查询到记录")
             return PlainText(result.joinToString(separator = "\n", prefix = "随机操作记录：\n"))
         } else {
-            val result = mutableListOf<String>()
-            for (qqNumber in qqNumbers) {
-                if (qqNumber == null) continue
-                val record = RandOperationHistory.getRecord(qqNumber)
-                if (record != null) {
-                    result.add("$qqNumber:")
-                    result.addAll(record)
-                }
-            }
+            val result = qqNumbers.mapNotNull { qqNumber ->
+                RandOperationHistory.getRecord(qqNumber)?.let { listOf("$qqNumber:", *it.toTypedArray()) }
+            }.flatten()
             if (result.isEmpty()) return PlainText("未查询到记录")
             return PlainText(result.joinToString(separator = "\n", prefix = "随机操作记录：\n"))
         }

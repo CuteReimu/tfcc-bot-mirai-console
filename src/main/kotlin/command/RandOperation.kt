@@ -18,15 +18,15 @@ object RandOperation : CommandHandler {
     override fun checkAuth(groupCode: Long, senderId: Long) = true
 
     override suspend fun execute(msg: GroupMessageEvent, content: String): Message {
-        var record = ""
+        val record = StringBuilder()
         for (i in 1..TFCCConfig.randOperation.number)
-            record += randOperations[Random.nextInt(randOperations.size)]
-        val text = record
+            record.append(randOperations[Random.nextInt(randOperations.size)])
+        val text = record.toString()
         val now = Calendar.getInstance()
         val time = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM, Locale.CHINA)
         time.timeZone = TimeZone.getTimeZone("GMT+8:00")
-        record += "\n${time.format(now.time)}"
-        RandOperationHistory.addRecord(msg.sender.id, record)
+        record.append("\n${time.format(now.time)}")
+        RandOperationHistory.addRecord(msg.sender.id, record.toString())
         return PlainText(text)
     }
 
