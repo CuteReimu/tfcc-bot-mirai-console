@@ -7,6 +7,7 @@ import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.Event
 import net.mamoe.mirai.event.EventPriority
 import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.event.events.NewFriendRequestEvent
 import net.mamoe.mirai.event.globalEventChannel
 import org.tfcc.bot.bilibili.Bilibili
 import org.tfcc.bot.storage.BilibiliData
@@ -32,6 +33,7 @@ internal object PluginMain : KotlinPlugin(
         initHandler(GroupMessageEvent::class, CommandHandler::handle)
         initHandler(GroupMessageEvent::class, RepeaterInterruption::handle)
         initHandler(GroupMessageEvent::class, BilibiliAnalysis::handle)
+        initHandler(NewFriendRequestEvent::class, ::handleNewFriendRequest)
     }
 
     private fun <E : Event> initHandler(eventClass: KClass<out E>, handler: suspend (E) -> Unit) {
@@ -44,5 +46,10 @@ internal object PluginMain : KotlinPlugin(
         ) {
             launch { handler(this@subscribeAlways) }
         }
+    }
+
+    private suspend fun handleNewFriendRequest(e: NewFriendRequestEvent) {
+        if (e.fromGroupId in TFCCConfig.qq.qqGroup)
+            e.accept()
     }
 }
