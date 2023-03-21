@@ -2,6 +2,7 @@ package org.tfcc.bot
 
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
+import net.mamoe.mirai.Bot
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.Event
@@ -14,6 +15,7 @@ import org.tfcc.bot.storage.BilibiliData
 import org.tfcc.bot.storage.PermData
 import org.tfcc.bot.storage.RandSpellData
 import org.tfcc.bot.storage.TFCCConfig
+import java.util.*
 import kotlin.reflect.KClass
 
 internal object PluginMain : KotlinPlugin(
@@ -34,6 +36,7 @@ internal object PluginMain : KotlinPlugin(
         initHandler(GroupMessageEvent::class, RepeaterInterruption::handle)
         initHandler(GroupMessageEvent::class, BilibiliAnalysis::handle)
         initHandler(NewFriendRequestEvent::class, ::handleNewFriendRequest)
+        checkQQGroups()
     }
 
     private fun <E : Event> initHandler(eventClass: KClass<out E>, handler: suspend (E) -> Unit) {
@@ -51,5 +54,23 @@ internal object PluginMain : KotlinPlugin(
     private suspend fun handleNewFriendRequest(e: NewFriendRequestEvent) {
         if (e.fromGroupId in TFCCConfig.qq.qqGroup)
             e.accept()
+    }
+
+    private fun checkQQGroups() {
+        if (TFCCConfig.checkQQGroups.isNotEmpty()) {
+            Timer().schedule(object : TimerTask() {
+                override fun run() {
+                    launch {
+                        Bot.instances.forEach { bot ->
+                            bot.groups.forEach {
+                                if (it.id !in TFCCConfig.checkQQGroups) {
+                                    it.quit()
+                                }
+                            }
+                        }
+                    }
+                }
+            }, 30000, 30000)
+        }
     }
 }

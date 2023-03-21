@@ -56,6 +56,8 @@ repeater_interruption:
   cool_down: 3  # 打断复读冷却时间（秒
   qq_group: # 打断复读的QQ群
     - 12345678
+# 自动退出除了以下群之外的所有群，为空则是不启用此功能
+check_qq_groups: { }
 ```
 
 修改配置文件后重新启动即可

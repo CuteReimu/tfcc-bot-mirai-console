@@ -91,4 +91,8 @@ object TFCCConfig : AutoSavePluginConfig("TFCCConfig") {
             qqGroup = longArrayOf(12345678)
         )
     )
+
+    @ValueName("check_qq_groups")
+    @ValueDescription("自动退出除了以下群之外的所有群，为空则是不启用此功能")
+    val checkQQGroups: LongArray by value(longArrayOf())
 }
