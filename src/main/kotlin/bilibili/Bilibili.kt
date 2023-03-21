@@ -156,7 +156,7 @@ object Bilibili {
         override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
             synchronized(BilibiliData) { // 这里既读又写需要保证是原子操作，需要加锁
                 val oldCookies = BilibiliData.cookies.mapNotNull { Cookie.parse(url, it) }
-                BilibiliData.cookies = oldCookies.plus(cookies).distinctBy { it.name }.map {
+                BilibiliData.cookies = (oldCookies + cookies).distinctBy { it.name }.map {
                     cookies.find { cookie -> it.name == cookie.name }?.toString()
                         ?: oldCookies.first { cookie -> it.name == cookie.name }.toString()
                 }

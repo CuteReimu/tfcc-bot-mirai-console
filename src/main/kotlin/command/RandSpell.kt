@@ -54,7 +54,7 @@ object RandSpell : CommandHandler {
         return text?.toPlainText()
     }
 
-    private val gameMap = RandGame.games.plus("全部").flatMap { game ->
+    private val gameMap = (RandGame.games + "全部").flatMap { game ->
         javaClass.getResourceAsStream("/spells/${game}.txt")?.use { `is` ->
             BufferedReader(InputStreamReader(`is`, Charsets.UTF_8)).use { br ->
                 var line: String?
