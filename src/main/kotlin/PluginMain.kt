@@ -36,6 +36,7 @@ internal object PluginMain : KotlinPlugin(
         initHandler(GroupMessageEvent::class, RepeaterInterruption::handle)
         initHandler(GroupMessageEvent::class, BilibiliAnalysis::handle)
         initHandler(NewFriendRequestEvent::class, ::handleNewFriendRequest)
+        initHandler(GroupMessageEvent::class, ReplayAnalyze::handle)
         checkQQGroups()
     }
 

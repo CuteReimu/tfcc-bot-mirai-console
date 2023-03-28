@@ -14,6 +14,7 @@ repositories {
 }
 
 dependencies {
+    testImplementation(kotlin("test"))
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
     implementation("com.google.zxing:core:3.5.1")
 }
