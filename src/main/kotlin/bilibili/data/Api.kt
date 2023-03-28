@@ -4,16 +4,6 @@ package org.tfcc.bot.bilibili.data
 const val LIVE = "https://live.bilibili.com/"
 
 // GET
-const val HUMAN_VERIFY = "https://passport.bilibili.com/x/passport-login/captcha?source=main_web"
-
-// GET
-const val GET_KEY = "https://passport.bilibili.com/login?act=getkey"
-
-// POST  Para: captchaType=6, username, password, keep=true,
-//             key, challenge, validate, seccode
-const val LOGIN = "http://passport.bilibili.com/web/login/v2"
-
-// GET
 const val GET_QRCODE = "https://passport.bilibili.com/qrcode/getLoginUrl"
 
 // POST
@@ -21,6 +11,9 @@ const val LOGIN_WITH_QRCODE = "https://passport.bilibili.com/x/passport-login/we
 
 // GET
 const val VIDEO_INFO = "https://api.bilibili.com/x/web-interface/view"
+
+// GET
+const val USER_VIDEOS = "https://api.bilibili.com/x/space/arc/search"
 
 // Live
 // GET  Para: room_id

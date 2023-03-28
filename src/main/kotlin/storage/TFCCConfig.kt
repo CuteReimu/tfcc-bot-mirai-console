@@ -7,12 +7,6 @@ import net.mamoe.mirai.console.data.*
 object TFCCConfig : AutoSavePluginConfig("TFCCConfig") {
     @Serializable
     class BilibiliConfig(
-        /** B站用户名 */
-        val username: String,
-
-        /** 密码 */
-        val password: String,
-
         /** B站ID */
         val mid: Int,
 
@@ -28,8 +22,6 @@ object TFCCConfig : AutoSavePluginConfig("TFCCConfig") {
     @ValueDescription("B站相关配置")
     val bilibili: BilibiliConfig by value(
         BilibiliConfig(
-            username = "13888888888",
-            password = "12345678",
             mid = 12345678,
             roomId = 12345678,
             areaV2 = 236, // 236-主机游戏
@@ -95,4 +87,23 @@ object TFCCConfig : AutoSavePluginConfig("TFCCConfig") {
     @ValueName("check_qq_groups")
     @ValueDescription("自动退出除了以下群之外的所有群，为空则是不启用此功能")
     val checkQQGroups: LongArray by value(longArrayOf())
+
+    @Serializable
+    class VideoPushConfig(
+        /** 视频推送间隔（秒） */
+        val delay: Long,
+
+        @SerialName("qq_group")
+        /** 视频推送的QQ群 */
+        val qqGroup: LongArray,
+    )
+
+    @ValueName("video_push")
+    @ValueDescription("视频推送相关配置")
+    val videoPush: VideoPushConfig by value(
+        VideoPushConfig(
+            delay = 600,
+            qqGroup = longArrayOf(12345678)
+        )
+    )
 }

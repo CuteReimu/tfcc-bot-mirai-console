@@ -37,6 +37,7 @@ internal object PluginMain : KotlinPlugin(
         initHandler(GroupMessageEvent::class, BilibiliAnalysis::handle)
         initHandler(NewFriendRequestEvent::class, ::handleNewFriendRequest)
         initHandler(GroupMessageEvent::class, ReplayAnalyze::handle)
+        startVideoPusher()
         checkQQGroups()
     }
 
@@ -72,6 +73,19 @@ internal object PluginMain : KotlinPlugin(
                     }
                 }
             }, 30000, 30000)
+        }
+    }
+
+    private fun startVideoPusher() {
+        val delay = TFCCConfig.videoPush.delay
+        if (delay > 0 && TFCCConfig.videoPush.qqGroup.isNotEmpty()) {
+            Timer().schedule(object : TimerTask() {
+                override fun run() {
+                    launch {
+                        VideoPusher.push()
+                    }
+                }
+            }, delay * 1000, delay * 1000)
         }
     }
 }

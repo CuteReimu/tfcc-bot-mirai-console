@@ -11,4 +11,7 @@ object BilibiliData : AutoSavePluginData("BilibiliData") {
 
     @ValueName("live")
     var live: Long by value(0L)
+
+    @ValueName("latest_video_id")
+    var lastVideoId: String by value("")
 }

@@ -43,8 +43,6 @@ bilibili:
   area_v2: "236"           # 直播分区，236-主机游戏
   mid: "12345678"          # B站ID
   password: "12345678"     # 密码
-  room_id: "12345678"      # B站直播间房间号
-  username: "13888888888"  # B站用户名
 qq:
   rand_count: 10            # 每天随符卡限制次数
   rand_one_time_limit: 20   # 单次随符卡的数量限制
@@ -56,6 +54,10 @@ repeater_interruption:
   cool_down: 3  # 打断复读冷却时间（秒
   qq_group: # 打断复读的QQ群
     - 12345678
+video_push:
+  delay: 600  # 视频推送间隔（秒）
+  qq_group: # 视频推送的QQ群
+    - 12345678
 # 自动退出除了以下群之外的所有群，为空则是不启用此功能
 check_qq_groups: { }
 ```
@@ -64,7 +66,7 @@ check_qq_groups: { }
 
 ## 登录B站
 
-第一次运行会提示扫码登录B站，此后会记录Cookies，无需再次登录。
+第一次运行会提示扫码登录B站，此后会记录Cookies，无需再次登录。你也可以不登录，但
 如果提示Cookies超时，或者其他原因需要重新扫码，删除 `data/org.tfcc.bot/BilibiliData.yml` 即可。
 
 ## 开发相关
@@ -84,7 +86,7 @@ check_qq_groups: { }
 - [x] 随作品、随机体
 - [x] B站视频解析
 - [x] B站直播解析
-- [ ] B站视频推送
+- [x] B站视频推送
 - [ ] 投票
 - [ ] 查新闻
 - [ ] 增加预约功能

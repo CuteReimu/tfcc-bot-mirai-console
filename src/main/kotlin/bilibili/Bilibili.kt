@@ -1,5 +1,6 @@
 package org.tfcc.bot.bilibili
 
+import bilibili.data.GetUserVideosResult
 import bilibili.data.VideoData
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
@@ -64,7 +65,7 @@ object Bilibili {
             .header("Content-Type", "application/x-www-form-urlencoded")
             .header("user-agent", ua)
             .get().build()
-        val resp = client!!.newCall(request).execute()
+        val resp = client.newCall(request).execute()
         if (resp.code != 200)
             throw Exception("请求错误，错误码：${resp.code}，返回内容：${resp.message}")
         return resp.body!!.byteStream()
@@ -75,12 +76,16 @@ object Bilibili {
             .header("Content-Type", "application/x-www-form-urlencoded")
             .header("user-agent", ua)
             .get().build()
-        val resp = client!!.newCall(request).execute()
+        val resp = client.newCall(request).execute()
         if (resp.code != 302) {
             resp.close()
             throw Exception("解析短链接失败，错误码：${resp.code}，返回内容：${resp.message}")
         }
         return resp.use { it.headers("Location").firstOrNull() }
+    }
+
+    fun getUserVideos(mid: Int): GetUserVideosResult {
+        return getAndDecode("${USER_VIDEOS}?mid=${mid}&pn=1&ps=1&order=pubdate")
     }
 
     private val logger: MiraiLogger by lazy {
@@ -89,11 +94,10 @@ object Bilibili {
 
     private const val ua =
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36 Edg/97.0.1072.69"
-    private var client: OkHttpClient? = null
+    private var client = OkHttpClient().newBuilder().followRedirects(false)
+        .connectTimeout(Duration.ofMillis(20000)).cookieJar(CookieJarWithData).build()
 
     fun init() {
-        client = OkHttpClient().newBuilder().followRedirects(false)
-            .connectTimeout(Duration.ofMillis(20000)).cookieJar(CookieJarWithData).build()
         if (!BilibiliData.cookies.any { it.startsWith("bili_jct") }) {
             val qrCode = getQRCode()
             val bits = QRCodeWriter().encode(qrCode.url, BarcodeFormat.QR_CODE, 26, 19)
@@ -106,7 +110,7 @@ object Bilibili {
     }
 
     private fun sendRequest(request: Request): JsonElement {
-        val resp = client!!.newCall(request).execute()
+        val resp = client.newCall(request).execute()
         if (resp.code != 200) {
             resp.close()
             throw Exception("请求错误，错误码：${resp.code}，返回内容：${resp.message}")
