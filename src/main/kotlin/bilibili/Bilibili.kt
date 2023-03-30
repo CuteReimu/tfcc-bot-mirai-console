@@ -81,7 +81,7 @@ object Bilibili {
             resp.close()
             throw Exception("解析短链接失败，错误码：${resp.code}，返回内容：${resp.message}")
         }
-        return resp.use { it.headers("Location").firstOrNull() }
+        return resp.use { it.header("Location") }
     }
 
     fun getUserVideos(mid: Int): GetUserVideosResult {

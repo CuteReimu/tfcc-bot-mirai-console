@@ -44,8 +44,10 @@ object BilibiliAnalysis {
 
     private fun tryShortUrl(content: String): String? {
         try {
-            val result = shortReg.find(content) ?: return null
-            return Bilibili.resolveShortUrl(result.value)
+            return (1..10).fold(content) { url, _ ->
+                val result = shortReg.find(url) ?: return url
+                Bilibili.resolveShortUrl(result.value) ?: return null
+            }
         } catch (e: Exception) {
             logger.error("解析短链接失败：", e)
         }
