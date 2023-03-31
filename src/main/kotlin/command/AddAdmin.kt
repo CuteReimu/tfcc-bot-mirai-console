@@ -20,6 +20,7 @@ object AddAdmin : CommandHandler {
             runCatching { it.toLong() }.getOrNull() ?: return null
         }
         if (qqNumbers.isEmpty()) return null
+        qqNumbers.forEach { if (it !in msg.group) return PlainText("${it}不是群成员") }
         val (succeed, failed) = qqNumbers.partition { !TFCCConfig.isSuperAdmin(it) && PermData.addAdmin(it) }
         val qqNumberToString = { qqNumber: Long ->
             msg.group[qqNumber]?.nameCardOrNick?.let { name -> "${name}($qqNumber)" } ?: qqNumber.toString()

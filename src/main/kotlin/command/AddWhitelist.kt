@@ -19,6 +19,7 @@ object AddWhitelist : CommandHandler {
             runCatching { it.toLong() }.getOrNull() ?: return null
         }
         if (qqNumbers.isEmpty()) return null
+        qqNumbers.forEach { if (it !in msg.group) return PlainText("${it}不是群成员") }
         val (succeed, failed) = qqNumbers.partition { PermData.addWhitelist(it) }
         val qqNumberToString = { qqNumber: Long ->
             msg.group[qqNumber]?.nameCardOrNick?.let { name -> "${name}($qqNumber)" } ?: qqNumber.toString()
@@ -28,6 +29,4 @@ object AddWhitelist : CommandHandler {
             else failed.joinToString(postfix = "已经是白名单了", transform = qqNumberToString)
         return PlainText(result)
     }
-
-    private fun qqNumberToString(qqNumber: Long) = {}
 }
