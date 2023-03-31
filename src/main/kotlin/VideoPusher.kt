@@ -44,7 +44,7 @@ object VideoPusher {
         }
     }
 
-    fun getNewVideo(): Video? {
+    private fun getNewVideo(): Video? {
         val videoList = Bilibili.getUserVideos(TFCCConfig.bilibili.mid)
         val latestVideo = videoList.list.vlist.firstOrNull() ?: return null
         if (BilibiliData.lastVideoId == latestVideo.bvid) return null

@@ -1,6 +1,9 @@
 package org.tfcc.bot.storage
 
-import net.mamoe.mirai.console.data.*
+import net.mamoe.mirai.console.data.AutoSavePluginData
+import net.mamoe.mirai.console.data.ValueDescription
+import net.mamoe.mirai.console.data.ValueName
+import net.mamoe.mirai.console.data.value
 
 object PermData : AutoSavePluginData("PermData") {
     @ValueDescription("管理员")
@@ -26,12 +29,6 @@ object PermData : AutoSavePluginData("PermData") {
             if (qq !in admin) return false
             admin -= qq
             return true
-        }
-    }
-
-    fun listAdmin(): LongArray {
-        synchronized(PermData) {
-            return longArrayOf(TFCCConfig.qq.superAdminQQ, *admin.toLongArray())
         }
     }
 
