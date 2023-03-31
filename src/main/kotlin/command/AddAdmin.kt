@@ -1,5 +1,6 @@
 package org.tfcc.bot.command
 
+import net.mamoe.mirai.contact.nameCardOrNick
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.PlainText
@@ -20,9 +21,12 @@ object AddAdmin : CommandHandler {
         }
         if (qqNumbers.isEmpty()) return null
         val (succeed, failed) = qqNumbers.partition { !TFCCConfig.isSuperAdmin(it) && PermData.addAdmin(it) }
+        val qqNumberToString = { qqNumber: Long ->
+            msg.group[qqNumber]?.nameCardOrNick?.let { name -> "${name}($qqNumber)" } ?: qqNumber.toString()
+        }
         val result =
-            if (succeed.isNotEmpty()) succeed.joinToString(prefix = "已增加管理员：")
-            else failed.joinToString(postfix = "已经是管理员了")
+            if (succeed.isNotEmpty()) succeed.joinToString(prefix = "已增加管理员：", transform = qqNumberToString)
+            else failed.joinToString(postfix = "已经是管理员了", transform = qqNumberToString)
         return PlainText(result)
     }
 }

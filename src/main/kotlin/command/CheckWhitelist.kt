@@ -1,5 +1,6 @@
 package org.tfcc.bot.command
 
+import net.mamoe.mirai.contact.nameCardOrNick
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.PlainText
@@ -15,9 +16,10 @@ object CheckWhitelist : CommandHandler {
 
     override suspend fun execute(msg: GroupMessageEvent, content: String): Message {
         val qq = runCatching { content.toLong() }.getOrNull() ?: return PlainText("指令格式如下：\n查看白名单 对方QQ号")
+        val text = msg.group[qq]?.nameCardOrNick?.let { name -> "${name}($qq)" } ?: qq.toString()
         val result =
-            if (PermData.isWhitelist(qq)) "${content}是白名单"
-            else "${content}不是白名单"
+            if (PermData.isWhitelist(qq)) "${text}是白名单"
+            else "${text}不是白名单"
         return PlainText(result)
     }
 }

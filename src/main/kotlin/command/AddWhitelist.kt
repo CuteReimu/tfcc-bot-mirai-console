@@ -1,5 +1,6 @@
 package org.tfcc.bot.command
 
+import net.mamoe.mirai.contact.nameCardOrNick
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.PlainText
@@ -19,9 +20,14 @@ object AddWhitelist : CommandHandler {
         }
         if (qqNumbers.isEmpty()) return null
         val (succeed, failed) = qqNumbers.partition { PermData.addWhitelist(it) }
+        val qqNumberToString = { qqNumber: Long ->
+            msg.group[qqNumber]?.nameCardOrNick?.let { name -> "${name}($qqNumber)" } ?: qqNumber.toString()
+        }
         val result =
-            if (succeed.isNotEmpty()) succeed.joinToString(prefix = "已增加白名单：")
-            else failed.joinToString(postfix = "已经是白名单了")
+            if (succeed.isNotEmpty()) succeed.joinToString(prefix = "已增加白名单：", transform = qqNumberToString)
+            else failed.joinToString(postfix = "已经是白名单了", transform = qqNumberToString)
         return PlainText(result)
     }
+
+    private fun qqNumberToString(qqNumber: Long) = {}
 }
