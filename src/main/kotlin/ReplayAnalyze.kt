@@ -5,10 +5,13 @@ import net.mamoe.mirai.message.data.FileMessage
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.tfcc.bot.replay.decodeReplay
+import org.tfcc.bot.storage.TFCCConfig
 import java.time.Duration
 
 object ReplayAnalyze {
     suspend fun handle(e: GroupMessageEvent) {
+        if (e.group.id !in TFCCConfig.qq.qqGroup)
+            return
         for (elem in e.message) {
             if (elem !is FileMessage) continue
             if (elem.name.endsWith(".rpy") && elem.size <= 10 * 1024 * 1024) {
