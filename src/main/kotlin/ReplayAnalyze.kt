@@ -23,5 +23,5 @@ object ReplayAnalyze {
         }
     }
 
-    private var client = OkHttpClient().newBuilder().connectTimeout(Duration.ofMillis(20000)).build()
+    private val client = OkHttpClient().newBuilder().connectTimeout(Duration.ofMillis(20000)).build()
 }
