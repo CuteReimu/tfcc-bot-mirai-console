@@ -21,7 +21,7 @@ object BilibiliAnalysis {
     )
 
     private val bvReg = Regex(
-        "(?:https?://www\\.bilibili\\.com/video/|https?://b23\\.tv)?bv([0-9A-Za-z]{10})",
+        "(?:https?://www\\.bilibili\\.com/video/|https?://b23\\.tv/)?bv([0-9A-Za-z]{10})",
         RegexOption.IGNORE_CASE
     )
 
