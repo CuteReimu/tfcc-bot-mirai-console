@@ -13,6 +13,8 @@ import org.tfcc.bot.storage.TFCCConfig
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
+import kotlin.math.min
+import kotlin.random.Random
 
 object RandSpell : CommandHandler {
     override val name = "随符卡"
@@ -53,16 +55,28 @@ object RandSpell : CommandHandler {
             d.count
         }
 
-    private fun Array<String>.randSpells(count: Int): Collection<String> {
+    private fun Array<String>.randSpells(count: Int): List<String> {
         val v1 = toMutableList()
         v1.addAll(v1.filter { it in doubleChance })
-        v1.shuffle()
-        val v2 = hashSetOf<String>()
+        v1.shuffleN(min(count * 2, v1.size)) // 打乱符卡。因为每张符卡最多出现两次，因此最坏情况取前2N张就够了
+        val v2 = arrayListOf<String>()
         v1.forEach {
             if (v2.size >= count) return@forEach
-            v2.add(it)
+            if (it !in v2) v2.add(it)
         }
         return v2
+    }
+
+    /**
+     * 打乱一个[MutableList]，但后续只会用到前n个值，因此进行了一些优化
+     */
+    private fun <K> MutableList<K>.shuffleN(n: Int) {
+        (0 until n).forEach { i ->
+            val j = Random.nextInt(size - i)
+            val vi = get(i)
+            set(i, get(j))
+            set(j, vi)
+        }
     }
 
     private val gameMap = (RandGame.games + "全部").flatMap { game ->
