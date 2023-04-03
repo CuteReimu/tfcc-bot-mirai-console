@@ -1,5 +1,7 @@
 package org.tfcc.bot.command
 
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.PlainText
@@ -21,42 +23,46 @@ object RandSpell : CommandHandler {
 
     override suspend fun execute(msg: GroupMessageEvent, content: String): Message? {
         val oneTimeLimit = TFCCConfig.qq.randOneTimeLimit
-        if (content.isEmpty())
-            return PlainText("请输入要随机的作品与符卡数量，例如：“随符卡 红”或“随符卡 全部 ${oneTimeLimit}”")
+        if (content.isEmpty()) return PlainText("请输入要随机的作品与符卡数量，例如：“随符卡 红”或“随符卡 全部 ${oneTimeLimit}”")
         val cmds = content.split(" ", limit = 2)
         val game = cmds[0]
         val count = cmds.getOrNull(1)?.toInt() ?: 1 // 默认抽取一张符卡
         val v = gameMap[game] ?: return null
-        if (count > v.size)
-            return PlainText("请输入小于或等于该作符卡数量${v.size}的数字")
-        val text: String?
-        synchronized(RandSpellData) {
+        if (count > v.size) return PlainText("请输入小于或等于该作符卡数量${v.size}的数字")
+        val rCount = increaseRandCount(msg.sender.id)
+        val limitCount = TFCCConfig.qq.randCount
+        val text =
+            if (rCount <= limitCount) v.randSpells(count).joinToString(separator = "\n")
+            else if (rCount == limitCount + 1) "随符卡一天只能使用${limitCount}次" else null
+        return text?.toPlainText()
+    }
+
+    private val mu = Mutex()
+
+    private suspend fun increaseRandCount(qq: Long): Int =
+        mu.withLock {
             val m = RandSpellData.randData.toMutableMap()
-            val d = m.getOrPut(msg.sender.id) { RandData() }
+            val d = m.getOrPut(qq) { RandData() }
             val last = Calendar.getInstance(TimeZone.getTimeZone("GMT+8:00"))
             last.time = Date(d.lastRandTime)
             val now = Calendar.getInstance(TimeZone.getTimeZone("GMT+8:00"))
-            if (now.get(Calendar.YEAR) != last.get(Calendar.YEAR)
-                || now.get(Calendar.MONTH) != last.get(Calendar.MONTH)
-                || now.get(Calendar.DATE) != last.get(Calendar.DATE)
-            ) d.count = 0
+            if (!now.isSameDay(last)) d.count = 0
             d.count++
-            val limitCount = TFCCConfig.qq.randCount
-            text = if (d.count <= limitCount) {
-                val v1 = v.toMutableList()
-                v1.addAll(v1.filter { it in doubleChance })
-                v1.shuffle()
-                val v2 = hashSetOf<String>()
-                v1.forEach {
-                    if (v2.size >= count) return@forEach
-                    v2.add(it)
-                }
-                v2.joinToString(separator = "\n")
-            } else if (d.count == limitCount + 1) "随符卡一天只能使用${limitCount}次" else null
             d.lastRandTime = now.time.time
             RandSpellData.randData = m
+            d.count
         }
-        return text?.toPlainText()
+
+    private fun Array<String>.randSpells(count: Int): Collection<String> {
+        val v1 = toMutableList()
+        v1.addAll(v1.filter { it in doubleChance })
+        v1.shuffle()
+        val v2 = hashSetOf<String>()
+        v1.forEach {
+            if (v2.size >= count) return@forEach
+            v2.add(it)
+        }
+        return v2
     }
 
     private val gameMap = (RandGame.games + "全部").flatMap { game ->
@@ -79,4 +85,7 @@ object RandSpell : CommandHandler {
             br.readLines().map { it.trim() }
         }
     } ?: listOf()
+
+    private fun Calendar.isSameDay(c: Calendar): Boolean =
+        arrayOf(Calendar.YEAR, Calendar.MONTH, Calendar.DATE).all { get(it) == c.get(it) }
 }
