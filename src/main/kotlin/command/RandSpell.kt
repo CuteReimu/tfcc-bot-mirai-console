@@ -43,10 +43,15 @@ object RandSpell : CommandHandler {
             d.count++
             val limitCount = TFCCConfig.qq.randCount
             text = if (d.count <= limitCount) {
-                synchronized(v) {
-                    v.shuffle()
-                    v.copyOfRange(0, count)
-                }.joinToString(separator = "\n")
+                val v1 = v.toMutableList()
+                v1.addAll(v1.filter { it in doubleChance })
+                v1.shuffle()
+                val v2 = hashSetOf<String>()
+                v1.forEach {
+                    if (v2.size >= count) return@forEach
+                    v2.add(it)
+                }
+                v2.joinToString(separator = "\n")
             } else if (d.count == limitCount + 1) "随符卡一天只能使用${limitCount}次" else null
             d.lastRandTime = now.time.time
             RandSpellData.randData = m
@@ -57,14 +62,7 @@ object RandSpell : CommandHandler {
     private val gameMap = (RandGame.games + "全部").flatMap { game ->
         javaClass.getResourceAsStream("/spells/${game}.txt")?.use { `is` ->
             BufferedReader(InputStreamReader(`is`, Charsets.UTF_8)).use { br ->
-                var line: String?
-                val ls = ArrayList<String>()
-                while (true) {
-                    line = br.readLine()
-                    if (line == null) break
-                    ls.add(line.trim())
-                }
-                val lines = ls.toTypedArray()
+                val lines = br.readLines().map { it.trim() }.toTypedArray()
                 if (game.length < 5) listOf(game to lines)
                 else listOf(
                     game to lines,
@@ -75,4 +73,10 @@ object RandSpell : CommandHandler {
             }
         } ?: listOf()
     }.toMap()
+
+    private val doubleChance = javaClass.getResourceAsStream("/spells/双倍概率.txt")?.use { `is` ->
+        BufferedReader(InputStreamReader(`is`, Charsets.UTF_8)).use { br ->
+            br.readLines().map { it.trim() }
+        }
+    } ?: listOf()
 }
