@@ -8,6 +8,8 @@
 [![](https://img.shields.io/github/license/CuteReimu/tfcc-bot-mirai-console)](https://github.com/CuteReimu/tfcc-bot-mirai-console/blob/main/LICENSE "许可协议")
 </div>
 
+**由于一些特殊原因，本项目不再更新新的功能，只进行旧功能的维护以及bug的修复。如需更多的功能，请移步其它repo。**
+
 这是东方Project沙包聚集地（以下简称“红群”）的机器人，基于 [Mirai](https://github.com/mamoe/mirai) 编写
 
 ## 声明
