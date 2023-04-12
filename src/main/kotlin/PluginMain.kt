@@ -33,7 +33,7 @@ internal object PluginMain : KotlinPlugin(
         Bilibili.init()
         RepeaterInterruption.init()
         initHandler(GroupMessageEvent::class, CommandHandler::handle)
-        initHandler(GroupMessageEvent::class, RepeaterInterruption::handle)
+        // initHandler(GroupMessageEvent::class, RepeaterInterruption::handle)
         initHandler(GroupMessageEvent::class, BilibiliAnalysis::handle)
         initHandler(NewFriendRequestEvent::class, ::handleNewFriendRequest)
         initHandler(GroupMessageEvent::class, ReplayAnalyze::handle)
