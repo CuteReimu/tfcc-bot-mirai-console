@@ -39,6 +39,7 @@ internal object PluginMain : KotlinPlugin(
         initHandler(GroupMessageEvent::class, ReplayAnalyze::handle)
         startVideoPusher()
         checkQQGroups()
+        checkWhitelist()
     }
 
     private fun <E : Event> initHandler(eventClass: KClass<out E>, handler: suspend (E) -> Unit) {
@@ -54,8 +55,41 @@ internal object PluginMain : KotlinPlugin(
     }
 
     private suspend fun handleNewFriendRequest(e: NewFriendRequestEvent) {
-        if (e.fromGroupId in TFCCConfig.qq.qqGroup)
+        if (e.bot.groups.any { e.fromId in it.members })
             e.accept()
+        else
+            e.reject()
+    }
+
+    private fun checkWhitelist() {
+        Timer().schedule(object : TimerTask() {
+            override fun run() {
+                launch {
+                    Bot.instances.forEach { bot ->
+                        val memberIds = bot.groups.flatMap {
+                            if (it.id !in TFCCConfig.qq.qqGroup) emptyList()
+                            else it.members.map { m -> m.id }
+                        }.toSet()
+                        val needDelete = bot.friends.filterNot { it.id == bot.id || it.id in memberIds }
+                        needDelete.forEach {
+                            try {
+                                it.delete()
+                            } catch (e: Exception) {
+                                logger.error("删除好友${it.id}失败", e)
+                            }
+                        }
+                        if (needDelete.isNotEmpty()) logger.info("已删除${needDelete.size}个好友")
+                        val needDelete2: List<Long>
+                        synchronized(PermData) {
+                            val result = PermData.whiteList.partition { it in memberIds }
+                            PermData.whiteList = result.first
+                            needDelete2 = result.second
+                        }
+                        if (needDelete2.isNotEmpty()) logger.info("已删除${needDelete2.size}个白名单")
+                    }
+                }
+            }
+        }, 300000, 300000)
     }
 
     private fun checkQQGroups() {
