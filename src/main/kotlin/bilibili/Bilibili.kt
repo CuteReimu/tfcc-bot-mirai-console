@@ -115,7 +115,9 @@ object Bilibili {
             resp.close()
             throw Exception("请求错误，错误码：${resp.code}，返回内容：${resp.message}")
         }
-        val body = resp.body!!.string()
+        var body = resp.body!!.string()
+        if (body.startsWith("{\"code\":-509,\"message\":\"请求过于频繁，请稍后再试\",\"ttl\":1}"))
+            body = body.replaceFirst("{\"code\":-509,\"message\":\"请求过于频繁，请稍后再试\",\"ttl\":1}", "")
         return json.parseToJsonElement(body)
     }
 
