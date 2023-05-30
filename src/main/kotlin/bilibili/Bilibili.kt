@@ -18,6 +18,10 @@ import java.io.InputStream
 import java.time.Duration
 
 object Bilibili {
+    fun nav(): NavData {
+        return getAndDecode(NAV)
+    }
+
     fun getRoomInfo(roomId: Int): LiveInfo {
         return getAndDecode(LIVE_INFO(roomId))
     }

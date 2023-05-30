@@ -28,6 +28,8 @@ const val STOP_LIVE = "https://api.live.bilibili.com/room/v1/Room/stopLive"
 // POST  Para: room_id, title, csrf
 const val UPDATE_TITLE = "https://api.live.bilibili.com/room/v1/Room/update"
 
+// GET
+const val NAV = "https://api.bilibili.com/x/web-interface/nav"
 
 fun LIVE_INFO(roomId: Int): String {
     return LIVE_INFO + roomId
