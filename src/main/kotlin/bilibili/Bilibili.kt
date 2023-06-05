@@ -48,7 +48,11 @@ object Bilibili {
         }.find { it.name == "bili_jct" } ?: throw Exception("B站登录过期")
         val postBody = "room_id=${roomId}&title=${title}&csrf=${biliJct.value}"
         val result = post(UPDATE_TITLE, postBody).decode<ResultData>()
-        if (result.code != 0) throw Exception("更新直播间标题失败")
+        if (result.code != 0) {
+            if (!result.message.isNullOrEmpty()) throw Exception(result.message)
+            if (!result.msg.isNullOrEmpty()) throw Exception(result.msg)
+            throw Exception("请联系管理员")
+        }
     }
 
     private fun getQRCode(): QRCode {

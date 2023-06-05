@@ -28,10 +28,12 @@ object ChangeLiveTitle : CommandHandler {
         }
         val roomId = TFCCConfig.bilibili.roomId
         val text =
-            if (kotlin.runCatching { Bilibili.updateTitle(roomId, content) }.isFailure)
-                "修改直播间标题失败，请联系管理员"
-            else
+            try {
+                Bilibili.updateTitle(roomId, content)
                 "直播间标题已修改为：$content"
+            } catch (e: Exception) {
+                "修改直播间标题失败，${e.message}"
+            }
         return PlainText(text)
     }
 }
