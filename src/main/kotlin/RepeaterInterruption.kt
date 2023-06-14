@@ -1,5 +1,7 @@
 package org.tfcc.bot
 
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import org.tfcc.bot.storage.TFCCConfig
@@ -14,11 +16,11 @@ object RepeaterInterruption {
         TFCCConfig.repeaterInterruption.qqGroup.forEach { data[it] = RepeaterData() }
     }
 
-    fun clean(groupCode: Long) {
-        data[groupCode]?.let {
-            synchronized(it) {
-                it.lastMessage = ""
-                it.counter = 0
+    suspend fun clean(groupCode: Long) {
+        data[groupCode]?.run {
+            mu.withLock {
+                lastMessage = ""
+                counter = 0
             }
         }
     }
@@ -28,7 +30,7 @@ object RepeaterInterruption {
         if (e.message.isEmpty()) return
         val m = e.message.subList(1, e.message.size).joinToString(separator = "")
         var interrupt = false
-        synchronized(data) {
+        data.mu.withLock {
             if (m != data.lastMessage) {
                 data.counter = 1
                 data.lastMessage = m
@@ -65,5 +67,6 @@ object RepeaterInterruption {
         var lastMessage: String = "",
         var counter: Int = 0,
         var lastTrigger: Long = 0,
+        val mu: Mutex = Mutex()
     )
 }
