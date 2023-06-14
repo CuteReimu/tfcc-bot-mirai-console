@@ -32,6 +32,7 @@ internal object PluginMain : KotlinPlugin(
         RandSpellData.reload()
         Bilibili.init()
         RepeaterInterruption.init()
+        initHandler(GroupMessageEvent::class, PingHandler::handle)
         initHandler(GroupMessageEvent::class, CommandHandler::handle)
         // initHandler(GroupMessageEvent::class, RepeaterInterruption::handle)
         initHandler(GroupMessageEvent::class, BilibiliAnalysis::handle)
