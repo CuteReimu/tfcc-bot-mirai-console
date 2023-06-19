@@ -41,5 +41,5 @@ fun getWbiKeys(): Pair<String, String> {
     val result = Bilibili.nav()
     val imgKey = result.wbiImg.imgUrl.substringAfterLast("/").split(".")[0]
     val subKey = result.wbiImg.subUrl.substringAfterLast("/").split(".")[0]
-    return Pair(imgKey, subKey)
+    return imgKey to subKey
 }
