@@ -7,6 +7,7 @@ import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.Event
 import net.mamoe.mirai.event.EventPriority
+import net.mamoe.mirai.event.events.BotInvitedJoinGroupRequestEvent
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.event.events.NewFriendRequestEvent
 import net.mamoe.mirai.event.globalEventChannel
@@ -38,6 +39,7 @@ internal object PluginMain : KotlinPlugin(
         initHandler(GroupMessageEvent::class, BilibiliAnalysis::handle)
         initHandler(NewFriendRequestEvent::class, ::handleNewFriendRequest)
         initHandler(GroupMessageEvent::class, ReplayAnalyze::handle)
+        initHandler(BotInvitedJoinGroupRequestEvent::class, ::handleInviteJoinGroupRequestEvent)
         // startVideoPusher()
         checkQQGroups()
         checkWhitelist()
@@ -122,5 +124,12 @@ internal object PluginMain : KotlinPlugin(
                 }
             }, delay * 1000, delay * 1000)
         }
+    }
+
+    private suspend fun handleInviteJoinGroupRequestEvent(e: BotInvitedJoinGroupRequestEvent) {
+        if (PermData.isAdmin(e.invitorId))
+            e.accept()
+        else
+            e.ignore()
     }
 }
