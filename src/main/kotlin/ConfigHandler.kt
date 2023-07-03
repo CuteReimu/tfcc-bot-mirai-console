@@ -10,7 +10,7 @@ object ConfigHandler {
         val content = e.message.contentToString()
         if (content.startsWith("增加QQ群 ")) {
             runCatching {
-                val qqGroup = content.substring(5).toLong()
+                val qqGroup = content.substring(6).toLong()
                 if (qqGroup in TFCCConfig.checkQQGroups) {
                     e.sender.sendMessage("该QQ群已存在")
                 } else {
@@ -20,7 +20,7 @@ object ConfigHandler {
             }
         } else if (content.startsWith("删除QQ群 ")) {
             runCatching {
-                val qqGroup = content.substring(5).toLong()
+                val qqGroup = content.substring(6).toLong()
                 if (qqGroup !in TFCCConfig.checkQQGroups) {
                     e.sender.sendMessage("该QQ群不存在")
                 } else {
