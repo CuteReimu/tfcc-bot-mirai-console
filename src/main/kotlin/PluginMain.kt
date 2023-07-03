@@ -8,6 +8,7 @@ import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.Event
 import net.mamoe.mirai.event.EventPriority
 import net.mamoe.mirai.event.events.BotInvitedJoinGroupRequestEvent
+import net.mamoe.mirai.event.events.FriendMessageEvent
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.event.events.NewFriendRequestEvent
 import net.mamoe.mirai.event.globalEventChannel
@@ -33,6 +34,7 @@ internal object PluginMain : KotlinPlugin(
         RandSpellData.reload()
         Bilibili.init()
         RepeaterInterruption.init()
+        initHandler(FriendMessageEvent::class, ConfigHandler::handle)
         initHandler(GroupMessageEvent::class, PingHandler::handle)
         initHandler(GroupMessageEvent::class, CommandHandler::handle)
         // initHandler(GroupMessageEvent::class, RepeaterInterruption::handle)
@@ -127,7 +129,7 @@ internal object PluginMain : KotlinPlugin(
     }
 
     private suspend fun handleInviteJoinGroupRequestEvent(e: BotInvitedJoinGroupRequestEvent) {
-        if (PermData.isAdmin(e.invitorId))
+        if (e.groupId in TFCCConfig.checkQQGroups)
             e.accept()
         else
             e.ignore()
