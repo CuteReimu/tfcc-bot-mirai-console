@@ -22,7 +22,7 @@ object RandDraw : CommandHandler {
         if (count > 32)
             return PlainText("选手数量太多")
         val a = ArrayList<Int>(count)
-        (1..count).forEach { a.add(it) }
+        (count downTo 1).forEach { a.add(it) }
         val textList = List(count / 2) {
             val a1 = a.removeLast()
             val a2 = a.removeAt(a.indices.random())
