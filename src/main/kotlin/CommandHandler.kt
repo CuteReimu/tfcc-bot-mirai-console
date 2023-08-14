@@ -40,7 +40,7 @@ interface CommandHandler {
             AddWhitelist, RemoveWhitelist, CheckWhitelist,
             GetLiveState, StartLive, StopLive, ChangeLiveTitle,
             // RandGame, RandCharacter, RandSpell,
-            RandDice,
+            RandDice, RandDraw, Roll,
         )
 
         suspend fun handle(e: GroupMessageEvent) {

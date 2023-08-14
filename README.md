@@ -96,3 +96,5 @@ check_qq_groups: { }
 - [ ] 打断复读
 - [ ] 随符卡
 - [x] rep解析
+- [x] 随机骰子、roll
+- [x] 抽签
