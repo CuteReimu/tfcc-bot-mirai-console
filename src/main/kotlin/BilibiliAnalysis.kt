@@ -86,13 +86,13 @@ object BilibiliAnalysis {
     private fun tryAvid(content: String): VideoData? {
         val result = avReg.matchAt(content, 0) ?: return null
         val aid = result.groupValues.last()
-        return Bilibili.getVideoData("aid=${aid}")
+        return Bilibili.getVideoData("aid=$aid")
     }
 
     private fun tryBvid(content: String): VideoData? {
         val result = bvReg.matchAt(content, 0) ?: return null
         val bvid = result.groupValues.last()
-        return Bilibili.getVideoData("bvid=${bvid}")
+        return Bilibili.getVideoData("bvid=$bvid")
     }
 
     private suspend fun tryLive(e: GroupMessageEvent, content: String): Boolean {

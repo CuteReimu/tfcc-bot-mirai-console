@@ -15,6 +15,7 @@ import org.tfcc.bot.storage.BilibiliData
 import org.tfcc.bot.utils.decode
 import org.tfcc.bot.utils.json
 import java.io.InputStream
+import java.net.URLEncoder
 import java.time.Duration
 
 object Bilibili {
@@ -46,7 +47,7 @@ object Bilibili {
         val biliJct = BilibiliData.cookies.mapNotNull {
             Cookie.parse(STOP_LIVE.toHttpUrl(), it)
         }.find { it.name == "bili_jct" } ?: throw Exception("B站登录过期")
-        val postBody = "room_id=${roomId}&title=${title}&csrf=${biliJct.value}"
+        val postBody = "room_id=${roomId}&title=${URLEncoder.encode(title, Charsets.UTF_8)}&csrf=${biliJct.value}"
         val result = post(UPDATE_TITLE, postBody).decode<ResultData>()
         if (result.code != 0) {
             if (!result.message.isNullOrEmpty()) throw Exception(result.message)
