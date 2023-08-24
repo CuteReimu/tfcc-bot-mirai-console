@@ -16,11 +16,11 @@ object ChangeLiveTitle : CommandHandler {
 
     override fun checkAuth(groupCode: Long, senderId: Long) = PermData.isWhitelist(senderId)
 
-    override suspend fun execute(msg: GroupMessageEvent, content: String): Message? {
+    override suspend fun execute(msg: GroupMessageEvent, content: String): Message {
         if (content.isEmpty())
             return PlainText("指令格式如下：\n修改直播标题 新标题")
-        if (content.length > 20)
-            return null
+        if (content.length > 80)
+            return PlainText("直播标题过长")
         if (!PermData.isAdmin(msg.sender.id)) {
             val uid = BilibiliData.live
             if (uid != 0L && uid != msg.sender.id)

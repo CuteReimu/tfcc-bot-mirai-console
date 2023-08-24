@@ -55,7 +55,13 @@ internal object PluginMain : KotlinPlugin(
             },
             priority = EventPriority.MONITOR,
         ) {
-            launch { handler(this@subscribeAlways) }
+            launch {
+                try {
+                    handler(this@subscribeAlways)
+                } catch (throwable: Throwable) {
+                    logger.error(throwable)
+                }
+            }
         }
     }
 

@@ -29,7 +29,7 @@ object Bilibili {
 
     fun startLive(roomId: Int, area: Int): LiveStartData {
         val biliJct = BilibiliData.cookies.mapNotNull {
-            Cookie.parse(STOP_LIVE.toHttpUrl(), it)
+            Cookie.parse(START_LIVE.toHttpUrl(), it)
         }.find { it.name == "bili_jct" } ?: throw Exception("B站登录过期")
         val postBody = "room_id=${roomId}&platform=pc&area_v2=${area}&csrf=${biliJct.value}"
         return postAndDecode(START_LIVE, postBody)
@@ -45,7 +45,7 @@ object Bilibili {
 
     fun updateTitle(roomId: Int, title: String) {
         val biliJct = BilibiliData.cookies.mapNotNull {
-            Cookie.parse(STOP_LIVE.toHttpUrl(), it)
+            Cookie.parse(UPDATE_TITLE.toHttpUrl(), it)
         }.find { it.name == "bili_jct" } ?: throw Exception("B站登录过期")
         val postBody = "room_id=${roomId}&title=${URLEncoder.encode(title, Charsets.UTF_8)}&csrf=${biliJct.value}"
         val result = post(UPDATE_TITLE, postBody).decode<ResultData>()
@@ -104,7 +104,8 @@ object Bilibili {
     private const val ua =
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36 Edg/97.0.1072.69"
     private val client = OkHttpClient().newBuilder().followRedirects(false)
-        .connectTimeout(Duration.ofMillis(20000)).cookieJar(CookieJarWithData).build()
+        .connectTimeout(Duration.ofMillis(20000)).callTimeout(Duration.ofMillis(20000)).cookieJar(CookieJarWithData)
+        .build()
 
     fun init() {
         if (!BilibiliData.cookies.any { it.startsWith("bili_jct") }) {
