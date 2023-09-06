@@ -75,8 +75,10 @@ object Bilibili {
             .header("user-agent", ua)
             .get().build()
         val resp = client.newCall(request).execute()
-        if (resp.code != 200)
+        if (resp.code != 200) {
+            resp.close()
             throw Exception("请求错误，错误码：${resp.code}，返回内容：${resp.message}")
+        }
         return resp.body!!.byteStream()
     }
 
