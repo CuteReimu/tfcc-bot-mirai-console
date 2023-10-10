@@ -99,6 +99,10 @@ object Bilibili {
         return getAndDecode("${USER_VIDEOS}?mid=${mid}&pn=1&ps=1&order=pubdate")
     }
 
+    fun getAreaList(): List<AreaData> {
+        return getAndDecode(AREA_LIST)
+    }
+
     private val logger: MiraiLogger by lazy {
         MiraiLogger.Factory.create(this::class, this::class.java.name)
     }

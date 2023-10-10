@@ -38,7 +38,7 @@ interface CommandHandler {
             ShowTips,
             AddAdmin, RemoveAdmin, ListAllAdmin,
             AddWhitelist, RemoveWhitelist, CheckWhitelist,
-            GetLiveState, StartLive, StopLive, ChangeLiveTitle,
+            GetLiveState, StartLive, StopLive, ChangeLiveTitle, ChangeLiveArea,
             // RandGame, RandCharacter, RandSpell,
             RandDice, RandDraw, Roll,
         )

@@ -31,6 +31,9 @@ const val UPDATE_TITLE = "https://api.live.bilibili.com/room/v1/Room/update"
 // GET
 const val NAV = "https://api.bilibili.com/x/web-interface/nav"
 
+// GET
+const val AREA_LIST = "https://api.live.bilibili.com/room/v1/Area/getList"
+
 fun LIVE_INFO(roomId: Int): String {
     return LIVE_INFO + roomId
 }

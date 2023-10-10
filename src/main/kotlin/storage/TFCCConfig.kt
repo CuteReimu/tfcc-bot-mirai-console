@@ -9,7 +9,7 @@ import net.mamoe.mirai.console.data.value
 
 object TFCCConfig : AutoSavePluginConfig("TFCCConfig") {
     @Serializable
-    class BilibiliConfig(
+    data class BilibiliConfig(
         /** B站ID */
         val mid: Int,
 
@@ -23,7 +23,7 @@ object TFCCConfig : AutoSavePluginConfig("TFCCConfig") {
     )
 
     @ValueDescription("B站相关配置")
-    val bilibili: BilibiliConfig by value(
+    var bilibili: BilibiliConfig by value(
         BilibiliConfig(
             mid = 12345678,
             roomId = 12345678,
