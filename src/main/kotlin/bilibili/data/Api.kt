@@ -13,7 +13,7 @@ const val LOGIN_WITH_QRCODE = "https://passport.bilibili.com/x/passport-login/we
 const val VIDEO_INFO = "https://api.bilibili.com/x/web-interface/view"
 
 // GET
-const val USER_VIDEOS = "https://api.bilibili.com/x/space/arc/search"
+const val USER_VIDEOS = "https://api.bilibili.com/x/space/wbi/arc/search"
 
 // Live
 // GET  Para: room_id

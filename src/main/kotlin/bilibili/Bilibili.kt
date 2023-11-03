@@ -96,7 +96,7 @@ object Bilibili {
     }
 
     fun getUserVideos(mid: Int): GetUserVideosResult {
-        return getAndDecode("${USER_VIDEOS}?mid=${mid}&pn=1&ps=1&order=pubdate")
+        return getAndDecode("${USER_VIDEOS}?mid=${mid}&pn=1&ps=30&order=pubdate&platform=web")
     }
 
     fun getAreaList(): List<AreaData> {
