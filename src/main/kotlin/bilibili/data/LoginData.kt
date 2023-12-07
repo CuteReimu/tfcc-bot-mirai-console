@@ -34,7 +34,7 @@ class QRCode(
     @SerialName("url")
     val url: String,
 
-    @SerialName("oauthKey")
+    @SerialName("qrcode_key")
     val oauthKey: String
 
 )
