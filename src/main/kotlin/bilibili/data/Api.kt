@@ -4,10 +4,10 @@ package org.tfcc.bot.bilibili.data
 const val LIVE = "https://live.bilibili.com/"
 
 // GET
-const val GET_QRCODE = "https://passport.bilibili.com/qrcode/getLoginUrl"
+const val GET_QRCODE = "https://passport.bilibili.com/x/passport-login/web/qrcode/generate"
 
 // POST
-const val LOGIN_WITH_QRCODE = "https://passport.bilibili.com/x/passport-login/web/qrcode/poll?qrcode_key="
+const val LOGIN_WITH_QRCODE = "https://passport.bilibili.com/x/passport-login/web/qrcode/poll"
 
 // GET
 const val VIDEO_INFO = "https://api.bilibili.com/x/web-interface/view"
