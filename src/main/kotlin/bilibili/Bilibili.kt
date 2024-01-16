@@ -4,9 +4,11 @@ import bilibili.data.GetUserVideosResult
 import bilibili.data.VideoData
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.int
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import net.mamoe.mirai.utils.MiraiLogger
-import net.mamoe.mirai.utils.info
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -121,7 +123,7 @@ object Bilibili {
             val bits = QRCodeWriter().encode(qrCode.url, BarcodeFormat.QR_CODE, 26, 19)
             val s = bits.toString("\u001B[48;5;0m  \u001B[0m", "\u001B[48;5;7m  \u001B[0m")
             logger.info("\n$s")
-            logger.info("请扫码登录B站后按回车")
+            logger.info("请扫码登录B站...")
 
             while (true) {
                 val result = get(LOGIN_WITH_QRCODE + "?qrcode_key=" + qrCode.oauthKey).decode<ResultData>()
@@ -131,17 +133,18 @@ object Bilibili {
                 //86038：二维码已失效
                 //86090：二维码已扫码未确认
                 //86101：未扫码
-                when(data?.get("code")?.jsonPrimitive?.int) {
+                when (data?.get("code")?.jsonPrimitive?.int) {
                     86038 -> { //二维码失效
                         init()
                         return
                     }
+
                     86090 -> {
                         logger.info("已扫码，等待用户确认...")
                         Thread.sleep(1000)
                     }
+
                     86101 -> {
-                        logger.info("等待用户扫码...")
                         Thread.sleep(5000)
                     }
 
