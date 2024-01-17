@@ -3,6 +3,7 @@ package org.tfcc.bot.command
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.PlainText
+import net.mamoe.mirai.utils.MiraiLogger
 import org.tfcc.bot.CommandHandler
 import org.tfcc.bot.bilibili.Bilibili
 import org.tfcc.bot.storage.BilibiliData
@@ -32,8 +33,13 @@ object ChangeLiveTitle : CommandHandler {
                 Bilibili.updateTitle(roomId, content)
                 "直播间标题已修改为：$content"
             } catch (e: Exception) {
+                logger.error(e)
                 "修改直播间标题失败，${e.message}"
             }
         return PlainText(text)
+    }
+
+    private val logger: MiraiLogger by lazy {
+        MiraiLogger.Factory.create(this::class, this::class.java.name)
     }
 }

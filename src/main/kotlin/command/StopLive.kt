@@ -3,6 +3,7 @@ package org.tfcc.bot.command
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.PlainText
+import net.mamoe.mirai.utils.MiraiLogger
 import org.tfcc.bot.CommandHandler
 import org.tfcc.bot.bilibili.Bilibili
 import org.tfcc.bot.storage.BilibiliData
@@ -24,11 +25,20 @@ object StopLive : CommandHandler {
                 return PlainText("谢绝唐突关闭直播")
         }
         val roomId = TFCCConfig.bilibili.roomId
-        val ret = Bilibili.stopLive(roomId)
+        val ret = try {
+            Bilibili.stopLive(roomId)
+        } catch (e: Exception) {
+            logger.error(e)
+            return PlainText("关闭直播失败，${e.message}")
+        }
         BilibiliData.live = 0
         val publicText =
             if (ret.change == 0) "直播间本来就是关闭的"
             else "直播间已关闭"
         return PlainText(publicText)
+    }
+
+    private val logger: MiraiLogger by lazy {
+        MiraiLogger.Factory.create(this::class, this::class.java.name)
     }
 }

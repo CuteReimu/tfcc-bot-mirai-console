@@ -3,6 +3,7 @@ package org.tfcc.bot.command
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.PlainText
+import net.mamoe.mirai.utils.MiraiLogger
 import org.tfcc.bot.CommandHandler
 import org.tfcc.bot.bilibili.Bilibili
 import org.tfcc.bot.bilibili.data.LIVE
@@ -20,7 +21,12 @@ object StartLive : CommandHandler {
     override suspend fun execute(msg: GroupMessageEvent, content: String): Message {
         val roomId = TFCCConfig.bilibili.roomId
         val area = TFCCConfig.bilibili.areaV2
-        val ret = Bilibili.startLive(roomId, area)
+        val ret = try {
+            Bilibili.startLive(roomId, area)
+        } catch (e: Exception) {
+            logger.error(e)
+            return PlainText("开始直播失败，${e.message}")
+        }
         val addr = "\n直播间地址：${LIVE + TFCCConfig.bilibili.roomId.toString()}\n快来围观吧！"
         val text =
             if (ret.change == 0) {
@@ -43,5 +49,9 @@ object StartLive : CommandHandler {
 //            friend.sendMessage(privateText)
 //        }
         return PlainText(text + addr)
+    }
+
+    private val logger: MiraiLogger by lazy {
+        MiraiLogger.Factory.create(this::class, this::class.java.name)
     }
 }
