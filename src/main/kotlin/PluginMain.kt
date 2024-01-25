@@ -42,7 +42,7 @@ internal object PluginMain : KotlinPlugin(
         initHandler(NewFriendRequestEvent::class, ::handleNewFriendRequest)
         initHandler(GroupMessageEvent::class, ReplayAnalyze::handle)
         initHandler(BotInvitedJoinGroupRequestEvent::class, ::handleInviteJoinGroupRequestEvent)
-        startVideoPusher()
+        // startVideoPusher()
         checkQQGroups()
         checkWhitelist()
     }
