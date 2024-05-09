@@ -61,7 +61,7 @@ video_push:
   qq_group: # 视频推送的QQ群
     - 12345678
 # 自动退出除了以下群之外的所有群，为空则是不启用此功能
-check_qq_groups: { }
+check_qq_groups: [ ]
 ```
 
 修改配置文件后重新启动即可
